@@ -1,0 +1,26 @@
+package vehicules;
+import reseau.*;
+
+import java.util.List;
+
+
+public class Graphe {
+
+
+    private final List<Noeud> noeuds;
+    private final List<Axe> axes;
+
+    public Graphe(List<Noeud> n, List<Axe> a) {
+        this.noeuds = n;
+        this.axes = a;
+    }
+
+    public List<Noeud> getNoeuds() {
+        return noeuds;
+    }
+
+    public List<Axe> getAxes() {
+        return axes;
+    }
+
+}

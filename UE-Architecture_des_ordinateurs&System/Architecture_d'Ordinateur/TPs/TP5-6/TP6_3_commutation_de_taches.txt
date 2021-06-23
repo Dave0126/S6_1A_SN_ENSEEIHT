@@ -1,0 +1,121 @@
+// write your program here
+SWITCHES = 0x90000000
+LEDS = 0xB0000000
+//Number_Prog = 2
+PILE1 = 0x100 // pile of Prog1
+PILE2 = 0x200 // pile of Prog2
+// When IT = 1, Prog_Courant = Prog_Courant + 1
+// Exchange two procesuss
+// SIMULATION:
+//        LEDS: x x x x x x x x | x x x x x x x x 
+//              LEDs ( 15 ~ 8 ) |  LEDs ( 0 ~ 7 )
+// Programme 1: x x x x x x x x | o o o o o o o o
+// Programme 2: o o o o o o o o | x x x x x x x x 
+ba start
+
+// --------The part of hanlder the interruption---------------
+handler_IT:
+        // push all of registers into the shack
+        push %r1 
+        push %r2
+        push %r3
+        push %r4
+        push %r5
+        push %r6
+        push %r7
+        push %r8
+        push %r9
+        push %r10
+        push %r28
+        
+        ld [%r17], %r1
+        st %sp, [%r19+%r1] 
+        inc %r1 // Prog_Courant = Prog_Courant + 1
+        ld [%r18], %r2 // Number_Prog
+        cmp %r1, %r2 // Compare with Prog_Courant and Number_Prog
+        beq handler_IT_equal //Prog_Courant = Number_Prog
+        ba handler_IT_else 
+handler_IT_equal:
+        clr %r1
+        st %r1, [%r17]
+        ba handler_IT_suite
+handler_IT_else:
+        st %r1, [%r17]
+        ba handler_IT_suite
+handler_IT_suite: 
+        ld [%r17], %r1
+        ld [%r19+%r1], %sp
+        pop %r28
+        pop %r10
+        pop %r9
+        pop %r8
+        pop %r7
+        pop %r6
+        pop %r5
+        pop %r4
+        pop %r3
+        pop %r2
+        pop %r1
+        reti
+// -------------------------------------------------------------------       
+        
+start:
+        set SWITCHES, %r15
+        set LEDS, %r16
+        set PILE1, %sp
+        set Prog_Courant, %r17
+        set Number_Prog, %r18
+        set Tab_sp, %r19
+        set PILE2, %sp
+        set Prog2, %r28
+        push %r28
+        push %r1
+        push %r2
+        push %r3
+        push %r4
+        push %r5
+        push %r6
+        push %r7
+        push %r8
+        push %r9
+        push %r10
+        push %r0
+        push %r28
+        ld [%r17], %r1
+        inc %r1
+        st %sp, [%r19+%r1]
+        clr %r1
+        clr %r28
+        set PILE1, %sp
+        ba Prog1
+
+//---------------PROGRAMME 1-----------------
+Prog1:       set 0, %r1
+             ba Prog_Loop_1
+Prog_Loop_1:    
+             inccc %r1
+             bvs Prog_Loop_End_1
+             st %r1, [%r16]
+             ba Prog_Loop_1
+Prog_Loop_End_1: 
+             ba Prog_Loop_End_1
+//--------------------------------------------
+
+
+//---------------PROGRAMME 2-------------------
+Prog2:       set 0, %r1
+             ba Prog_Loop_2
+Prog_Loop_2: 
+             inccc %r1
+             bvs Prog_Loop_End_2
+             mov %r1, %r2
+             sll %r2, 8, %r2 // << 8 bits，左移8bits
+             st %r2, [%r16]
+             ba Prog_Loop_2
+Prog_Loop_End_2: 
+             ba Prog_Loop_End_2
+//---------------------------------------------
+
+Tab_sp: .word 0x100, 0x200
+Number_Prog : .word 2
+Prog_Courant : .word 0

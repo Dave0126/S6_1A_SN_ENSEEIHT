@@ -1,0 +1,21 @@
+package reseau;
+
+/**
+ * Représente un noeud d'entrée sortie, servant uniquement à délimiter l'espace traité par la simulation
+ * et s'occupant de faire entrer et sortir des véhicules de la simulation
+ * @version 0.1
+ * @author Adrien, Clément, Pierre-Louis
+ */
+public class NoeudEnSo extends Noeud {
+
+	/**
+	 * Crée un noeud à partir de ses coordonnées
+	 * @param abscisse Abscisse du noeud
+	 * @param ordonnee Ordonnée du noeud
+	 * @param nom Nom du noeud
+	 */
+	NoeudEnSo(double abscisse, double ordonnee, String nom) {
+		super(abscisse, ordonnee, nom);
+	}
+    
+}

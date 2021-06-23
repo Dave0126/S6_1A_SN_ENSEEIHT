@@ -1,0 +1,76 @@
+package vue;
+
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+
+
+public class CreerInter {
+	
+	private JDialog createInter;
+	private static JFrame fenetre;	// fenêtre principale
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					CreerInter window = new CreerInter(fenetre);
+					window.createInter.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public CreerInter(JFrame fenetre) {
+		initialize(fenetre);
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize(JFrame fenetre) {
+		createInter = new JDialog(fenetre);
+		createInter.setVisible(true);
+		createInter.setLocationRelativeTo(null);
+		createInter.setSize(400,200);
+		Container contenu = createInter.getContentPane();
+		
+		// Bouton OK
+		JPanel ok = new JPanel();
+		ok.setLayout(new FlowLayout());
+		JButton btnOk = new JButton("OK");
+		ok.add(btnOk);
+		btnOk.addActionListener(this::valider);
+		
+		// Bouton annuler
+		JButton btnAnnuler = new JButton("Annuler");
+		ok.add(btnAnnuler);
+		btnAnnuler.addActionListener(this::annuler);
+		contenu.add(ok, BorderLayout.SOUTH);
+	}
+	
+	private void valider(ActionEvent e) {
+		createInter.setVisible(false);				
+	}
+	
+	private void annuler(ActionEvent e) {
+		createInter.setVisible(false);				
+	}
+
+}

@@ -1,0 +1,59 @@
+package simulation.reseau;
+
+/**
+ * Représente une intersection
+ * @version 0.1
+ * @author Clément, Sylvain
+ */
+public class Intersection { // à extends
+
+    private final int TAILLEMAX = 8;
+
+    private int nbVoies;
+
+    private Voie[][] voieNumerotees;
+
+    private Vehicules[][] quadrillage; //quadrillage d'emplacement de véhicules de taille nbvoies*4    
+
+	/**
+	 * Crée un noeud à partir de ses coordonnées
+	 * @param reseau Réseau auquel appartient le noeud
+	 * @param abscisse Abscisse du noeud
+	 * @param ordonnee Ordonnée du noeud
+	 * @param nom Nom du noeud
+	 */
+	Intersection(Reseau reseau, double abscisse, double ordonnee, String nom) {
+		super(reseau, abscisse, ordonnee, nom);
+        this.calculNbVoie();
+        this.voieeNumerotees = new Voie[8][nbVoies];
+	}
+
+
+    public void calculTrajectoire() {
+        int sortie;
+        //pour chaque axe en entrees
+        for (int i = 0; i<8; i++) {
+            //pour chaque voie
+            for (int j = 0; i<nbVoies; j++) {
+                if (this.voieeNumerotees[i][j] !=null && this.voieeNumerotees[i][j].) { // il faut .vehicule proche ? return boolean
+                    sortie = this.voieeNumerotees[i][j].getVehicule();
+
+                }
+            }
+        }
+    }
+
+    private static void getTrajectoire(){
+
+    }
+
+    /**
+     * Calcule le nombre maximal de voies pour tous axes de l'intersection
+     */
+    public void calculNbVoie() {
+        int nbMaxVoie = 0;
+        for (Axe axe : axes) {
+            nbMaxVoie = max (nbMaxVoie, axe.getNbVoie());
+        }
+    }
+}

@@ -1,0 +1,294 @@
+package simulation.reseau;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import simulation.vehicules.Vehicule;
+
+// à faire l126
+
+
+
+/**choix de conception rappel 
+ * les voies sont positionnées sur les côtés (sinon quand on va tout droit on peut se retrouver)
+ */
+
+/**
+ * Représente une intersection (avec max 3 voies sur un axe ou du moins on ne peut gérer le déplacement que de 3 voies en même temps)
+ * @version 0.1
+ * @author Clément, Sylvain
+ */
+
+
+/**
+ *  * Pour que ça fonctionne il faut:
+ * -> créer tous les constructeurs des sous classes et faire en sorte de pouvoir bien construire l'intersection :
+ *       -> pour cela recommandé : intervention d'une personne ayant travaillé
+ *          sur les Noeuds pour savoir comment ils sont appelés à la création ...
+ * -> implanter et faire fonctionner les sous fonctions appelées par deplacementIntersection càd :
+ *       -> conflit ()
+ *       -> calculTrajectoire()
+ *       -> pasPrioritaire
+ *       -> deplacer()
+ * -> implanter Quadrillage
+ * 
+ * Finalement c'est un peu évident, mais il faudra que tout se goupille bien
+ */
+
+
+public class Intersection { // à extends
+
+    private ArrayList<Axe> axesEntrant;
+    private ArrayList<Axe> axesSortant;
+    
+    private Map<Axe,Integer> axe2Int;
+    private Map<Axe,Position> axe2Position;
+    private Map<Position,Integer> position2Int;
+    private Map<Axe,Priorite> axe2Priorite;
+
+    private Quadrilage quadrillageIntersection;
+
+    //liste des indices du quadrillages qu'a un axe
+    Map<Axe,ArrayList<Integer>> correspondanceAxeQuadrillage;
+
+	/**
+	 * Crée un noeud à partir de ses coordonnées
+	 * @param reseau Réseau auquel appartient le noeud
+	 * @param abscisse Abscisse du noeud
+	 * @param ordonnee Ordonnée du noeud
+	 * @param nom Nom du noeud
+	 */
+	Intersection(Reseau reseau, double abscisse, double ordonnee, String nom) {
+		super(reseau, abscisse, ordonnee, nom);
+        this.calculNbVoie();
+        this.voieeNumerotees = new Voie[8][nbVoies];
+	}
+
+
+    public void deplacementIntersection(double temps) {
+        ArrayList<Trajectoire> listeTrajectoire = new ArrayList<>();
+        //pour chaque axe en entrees
+        for (Axe unAxeEntrant : axesEntrant) {
+            //pour chaque voie de l'axe
+            for (Voie voie : unAxeEntrant.getVoies()) {
+                //si un véhicule peut s'engager on enregistre sa trajectoire dans l'intersection
+                if (voie.vehiculeProche(temps)) {
+                    listeTrajectoire.add(calculTrajectoire(voie.getVehiculeProche()));
+                }
+            }
+        }
+        //ajout des trajectoires des véhicules déjà dans l'intersection)
+        listeTrajectoire.addAll(quadrillageIntersection.getTrajectoiresEngagees());
+        //gestion des conflits entre trajectoires et priorités
+        ArrayList<Trajectoire> listeConflit;
+        for (Trajectoire trajectoire : listeTrajectoire) {
+            listeConflit = trajectoire.conflit(listeTrajectoire);
+            //si il y a conflit
+            if (!listeConflit.isEmpty()) {
+                if (trajectoire.pasPrioritaire(listeTrajectoire)) {
+                    listeTrajectoire.remove(trajectoire);
+                }
+            }
+        }
+        //déplacement des véhicules prioritaires sur le quadrillage puis des nouveax dans listeTrajectoire
+        quadrillageIntersection.deplacer(listeTrajectoire);
+    }
+
+    /**
+     * 
+     * @param vehicule sur voie
+     * @param axe l'axe dont vient le véhicule
+     * @return la Trajectoire que suit le
+     */
+    Trajectoire calculTrajectoire(Vehicule vehicule, Axe axe) {
+        Axe axeCible = vehicule.getNextItineraire();
+        int diff=position2Int.get(axe2Position.get(axe)) - position2Int.get(axe2Position.get(axeCible));
+        //si les 2 axes ont la même parité ils sont en face
+        boolean tourne = (diff%2)==0;
+        //cf propriété avec ces valeurs pour les positions
+        boolean tourneAGauche = diff==-1 | diff==3;
+        boolean tourneADroite = diff==1 | diff==-3;
+        Trajectoire nouvelleTraj = new Trajectoire(axe2Priorite.get(axe), vehicule, tourneAGauche);
+        int x,y;
+        if (axe2Position.get(axe).ordinal()%2 == 0) { //si axe Nord-Sud
+            x=axe2Int.get(axeCible);//dest
+            y=axe2Int.get(axe);//source
+        } else {
+            y=axe2Int.get(axeCible);//dest
+            x=axe2Int.get(axe);//source
+        }
+        /* désormais on a la position du point à partir duquel on doit rouner */
+        Case caseVehicule = new Case(axe, axeCible,tourneADroite,tourneAGauche);
+        Case CaseAlignement = new Case(x, y);
+        //un véhicule occupe les 2 cases quand il se déplace d'une case à l'autre
+        int tick=0;
+        int tousLes2=0;
+        nouvelleTraj.put(caseVehicule,tick);
+        while ( (caseVehicule.dansLimite()) || !CaseAlignement.isEqual(caseVehicule)) {
+            tousLes2+=1;
+            tick+=tousLes2%2;
+            avancer(caseVehicule,tick);
+            ajouterTrajectoire
+        }
+        return trajectoire;
+    }
+
+    private class Trajectoire {
+        //vehicule associé à la trajectoire
+        private Vehicule vehicule;
+        private Priorite priorite;
+        private boolean tourneAGauche;
+        private Map<Case, Integer> trajectoirevehicule;
+
+        Trajectoire(Priorite nvPriorite, Vehicule nvVehicule, boolean tourneGauche) {
+            this.trajectoirevehicule = new HashMap<>();
+            this.tourneAGauche = tourneGauche;
+            this.priorite = nvPriorite;
+            this.vehicule = nvVehicule;
+        }
+        /**
+         * Permet d'évaluer si une
+         * @param listeTrajectoire
+         * @return True si une trajectoire de la liste est plus prioritaire
+         */
+        boolean pasPrioritaire(ArrayList<Trajectoire> listeTrajectoire) {
+            return true;
+        }
+        void put(Case nouvelleCase, Integer tick) { this.trajectoirevehicule.put(nouvelleCase, tick)} 
+        /**
+         * Permet dévaluer des conflits entre une trajectoire et une liste de trajectoire
+         * @param listeTrajectoire
+         * @return Renvoie la liste des trafectoires avec laquelle elle est en conflit, la liste est vide si il n'est en conflit avec personne
+         */
+        ArrayList<Trajectoire> conflit(ArrayList<Trajectoire> listeTrajectoire) {
+            ArrayList<Trajectoire> listeConflit = new ArrayList<>();
+            return listeConflit;
+        }
+        Vehicule getVehicule() {return this.vehicule;}
+    }
+
+
+    private class Case {
+        private int x;
+        private int y;
+        Case(int x, int y) {this.x = x;this.y = y;}
+        public int getX() {return x;}
+        public int getY() {return y;}
+        boolean isEqual(Case autreCase) {
+            return (this.x == autreCase.getX()) && (this.y == autreCase.getY());
+        }
+        /**
+         * cré la case au bon endroit pour pouvoir s'engager dans l'intersection
+         * (si quelqu'un va à droite il sera vers la case de droite)
+         * @param axe
+         * @param axeCible
+         * @param tourneADroite
+         * @param tourneAGauche
+         */
+        Case (Axe axe, Axe axeCible, boolean tourneADroite, boolean tourneAGauche) {
+            Position origine = axe2Position.get(axe);
+            int nbVoieDepart = axe.getNbVoies();
+            int positiondansvoie;
+            if (nbVoieDepart>1) {
+                if (tourneADroite) {
+                    positiondansvoie=nbVoieDepart-1;
+                } else if (tourneAGauche) {
+                    positiondansvoie=0;
+                } else {
+                    /*divisé par 2 puis arrondi au supérieur (plus suscpetible d'aller tout droit à partir de la voie de droite)
+                    logique du point de vue route étant donnée que quand on tourne à droite on est tjrs prioritaire*/
+                    positiondansvoie=nbVoieDepart-nbVoieDepart/2;
+                }
+            }
+            else {positiondansvoie=0;}
+            //maintenant on a une place par rapport au premier
+            switch (origine) {
+                case Nord:
+                this.y=nbVoieDepart-positiondansvoie;
+                this.x=0;
+                break;
+                case Sud:
+                this.y=quadrillageIntersection.nbColonne - nbVoieDepart + positiondansvoie;
+                this.x=quadrillageIntersection.nbLigne-1;
+                break;
+                case Est:
+                this.x=nbVoieDepart-positiondansvoie;
+                this.y=quadrillageIntersection.nbColonne-1;
+                break;
+                case Ouest:
+                this.y=0;
+                this.x=quadrillageIntersection.nbLigne - nbVoieDepart + positiondansvoie;
+                break;
+            }
+        }
+        boolean dansLimite() {
+            boolean bonX=(this.x<quadrillageIntersection.nbLigne) & (this.x>=0);
+            boolean bonY=(this.y<quadrillageIntersection.nbColonne) & (this.y>=0);
+            return bonX & bonY;
+        }
+    }
+
+    /**
+     * Classe du quadrillage
+     */
+    private class Quadrilage {
+        ArrayList<Trajectoire> trajectoiresDejaEngagees;
+        int nbLigne,nbColonne;
+        Case[][] quadrillage;
+        /**
+         * on initialise le quadrillage avec les axes Nord-Sud sur les colonnes et Est-Ouest sur les lignes.
+         * Le nombre de quadrillage sur un axe Nord-Sud Est-Ouest prend le nombre maximal de voie qu'il y a sur
+         * cette voies donc exemple si Nord=4 voies (2 axes à 2 voies) et Sud est de 2 voies (2 axes d'une voie)
+         * on aura un quadrillage avec 4 colonnes
+         */
+        void initQuadrillage (ArrayList<Axe> axesEntrant, ArrayList<Axe> axesSortant){
+            int nbVoiesNord=0;
+            int nbVoiesSud=0;
+            int nbVoiesEst=0;
+            int nbVoiesOuest=0;
+            ArrayList<Axe> toutaxes = axesEntrant;
+            toutaxes.addAll(axesSortant);
+            for (Axe unAxeSortant : toutaxes) {
+                switch (axe2Position.get(unAxeSortant)) {
+                    case Nord:
+                    nbVoiesNord+=unAxeSortant.getNbVoies();
+                    break;
+                    case Sud:
+                    nbVoiesSud+=unAxeSortant.getNbVoies();
+                    break;
+                    case Est:
+                    nbVoiesEst+=unAxeSortant.getNbVoies();
+                    break;
+                    case Ouest:
+                    nbVoiesOuest+=unAxeSortant.getNbVoies();
+                    break;
+                }
+            }
+            int a,b;
+            if (nbVoiesNord<nbVoiesSud) {a = nbVoiesSud;}
+            else {a=nbVoiesNord;}
+            if (nbVoiesEst<nbVoiesOuest) {b = nbVoiesOuest;}
+            else {b=nbVoiesEst;}
+            this.nbLigne = b;
+            this. nbColonne = a;
+            this.quadrillage = new Case[b][a];
+            /*désormais on crée la correspondance entre les voies et les entiers auxquelles
+             elles correspondent dans le quadrillage*/
+             position2Int = new HashMap<>();
+             position2Int.put(Position.Nord,0);
+             position2Int.put(Position.Est,1);
+             position2Int.put(Position.Sud,2);
+             position2Int.put(Position.Ouest,3);
+        }
+        ArrayList<Trajectoire> getTrajectoiresEngagees () {return this.trajectoiresDejaEngagees;}
+        /**
+         * Cettefonction déplace sur le quadrillage de l'intersection les véhicules
+         * @param vehicule
+         */
+        void deplacer(ArrayList<Trajectoire> listeTrajectoires){
+            //il faut d'abord déplacer les véhicules dans l'intersection puis ajouter les nouveaux véhicules de dehors et leur donner la priorité Engage.
+            //il met également à jour sa liste des trajectoires  des véhicules dans l'intersection
+        }
+    }
+}

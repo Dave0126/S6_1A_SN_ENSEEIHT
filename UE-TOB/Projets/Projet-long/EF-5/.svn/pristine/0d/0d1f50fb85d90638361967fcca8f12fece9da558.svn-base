@@ -1,0 +1,99 @@
+package reseau;
+
+import java.util.ArrayList;
+
+/**
+ * Points reliés par les axes, correspond à tout type d'intersection, ou simplement à un changement notable sur un axe
+ * @version 0.1
+ * @author Adrien, Clément, Pierre-Louis
+ */
+public abstract class Noeud {
+
+	/**
+	 * Nom du noeud
+	 */
+	private String nom;
+	
+	/**
+	 * Abscisse du noeud
+	 */
+	private double abscisse;
+	
+	/**
+	 * Ordonnée du noeud
+	 */
+	private double ordonnee;
+	
+	/**
+	 * Axes entrants vers le noeud
+	 */
+	private ArrayList<Axe> axesEntrants;
+	
+	/**
+	 * Axes sortants du noeud
+	 */
+	private ArrayList<Axe> axesSortants;
+	
+	/**
+	 * Crée un noeud à partir de ses coordonnées
+	 * @param abscisse Abscisse du noeud
+	 * @param ordonnee Ordonnée du noeud
+	 * @param nom Nom du noeud
+	 */
+	Noeud(double abscisse, double ordonnee, String nom) {
+		this.abscisse = abscisse;
+		this.ordonnee = ordonnee;
+		this.nom = nom;
+		this.axesEntrants = new ArrayList<Axe>();
+		this.axesSortants = new ArrayList<Axe>();
+	}
+	
+	/**
+	 * Obtient le nom du noeud
+	 * @return le nom du noeud
+	 */
+    public String getNom() {
+        return this.nom;
+    }
+
+    /**
+     * Obtient l'abscisse du noeud
+     * @return l'abscisse du noeud
+     */
+    public double getAbscisse() {
+        return this.abscisse;
+    }
+
+    /**
+     * Obtient l'ordonnée du noeud
+     * @return l'ordonnée du noeud
+     */
+    public double getOrdonnee() {
+        return this.ordonnee;
+    }
+
+    /**
+     * Ajouter un Axe entrant.
+     * @param axe L'axe à ajouter en sortie
+     */
+	void ajouterAxeEntrant(Axe axe) {
+		axesEntrants.add(axe);
+	}
+	
+    /**
+     * Ajouter un Axe sortant.
+     * @param axe L'axe à ajouter en entrée
+     */
+	void ajouterAxeSortant(Axe axe) {
+		axesSortants.add(axe);
+	}
+	
+	/**
+	 * Calculer la distance par rapport à un autre Noeud
+	 * @param autre 
+	 */
+	public double distance(Noeud autre) {
+		return Math.sqrt(Math.pow(this.abscisse - autre.getAbscisse(), 2)
+		+ Math.pow(this.getOrdonnee() - autre.getOrdonnee(), 2));
+	}
+}

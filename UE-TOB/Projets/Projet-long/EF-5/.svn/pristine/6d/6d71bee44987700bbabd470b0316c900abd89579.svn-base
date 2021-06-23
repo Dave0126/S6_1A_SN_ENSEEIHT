@@ -1,0 +1,163 @@
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class PanelDrawing extends JPanel implements MouseListener, MouseMotionListener{
+
+    List<Route> listRoute = new ArrayList<Route>();
+    List<RondPoint> listRondPoint = new ArrayList<RondPoint>();
+    MapPoint[] listPoint = new MapPoint[2];
+    int clicks = 0;
+    boolean dessinerRoute = true;
+
+
+    public PanelDrawing(){
+        this.addMouseListener(this);
+        this.addMouseMotionListener(this);
+        this.setVisible(true);
+    }
+
+
+    @Override
+    public void paint(Graphics g){
+        for (Route i : listRoute){
+            i.paint(g);
+        }
+        for (RondPoint i : listRondPoint){
+            i.paint(g);
+        }
+    }
+
+
+    public void mousePressed(MouseEvent e) {
+        if (e.getButton()==MouseEvent.BUTTON1){
+            if (dessinerRoute) drawRoute(e);
+            else drawRondPoint(e);
+        }
+        else {
+            deleteRoute(e);
+        }
+    }
+
+    public void drawRoute(MouseEvent e){
+        clicks++;
+        if (clicks == 2 ){
+            int x = e.getX();
+            int y = e.getY();
+            MapPoint deuxiemePoint = new MapPoint(x,y);
+            listPoint[1] = deuxiemePoint;
+            listRoute.add(new Route(listPoint[0].getX(),listPoint[0].getY(),
+                    listPoint[1].getX(),listPoint[1].getY(),2,20));
+            this.add(listRoute.get(listRoute.size()-1));
+            System.out.println(listRoute.get(listRoute.size()-1).getBounds().width);
+            this.validate();
+            this.repaint();
+            clicks = 0;
+        } else {
+            int x = e.getX();
+            int y = e.getY();
+            MapPoint premierPoint = new MapPoint(x,y);
+            listPoint[0] = premierPoint;
+        }
+    }
+
+    void deleteRoute(MouseEvent e){
+        Iterator<Route> iterator = listRoute.iterator();
+        while (iterator.hasNext()){
+            Route i = iterator.next();
+            if (isIN(i,e.getX(),e.getY())){
+                iterator.remove();
+                this.remove(i);
+                this.validate();
+                this.repaint();
+            }
+        }
+        Iterator<RondPoint> iterator1 = listRondPoint.iterator();
+        while (iterator1.hasNext()){
+            RondPoint i = iterator1.next();
+            if (isIN(i,e.getX(),e.getY())){
+                iterator1.remove();
+                this.remove(i);
+                this.validate();
+                this.repaint();
+            }
+        }
+    }
+
+    public void mouseMoved(MouseEvent e){
+        int x = e.getX();
+        int y = e.getY();
+        for (Route i : listRoute){
+            if (isIN(i,x,y)) i.changeColor(true);
+            else i.changeColor(false);
+            this.validate();
+            this.repaint();
+        }
+    }
+
+    public boolean isIN(Route routeToCheck, int x, int y){
+        Rectangle r = new Rectangle(routeToCheck.x1-routeToCheck.centreX,
+                routeToCheck.y1-routeToCheck.centreY,routeToCheck.w,routeToCheck.h);
+        return r.contains(x,y);
+    }
+
+    public boolean isIN(RondPoint rpToCheck, int x, int y){
+        Rectangle r = new Rectangle(rpToCheck.x1,
+                rpToCheck.y1,rpToCheck.rayon,rpToCheck.rayon);
+        return r.contains(x,y);
+    }
+
+    public void mouseDragged(MouseEvent e){ }
+    public void mouseReleased(MouseEvent e) { }
+    public void mouseExited(MouseEvent e) { }
+    public void mouseClicked(MouseEvent e) { }
+    public void mouseEntered(MouseEvent e) { }
+
+    void routeOuIntersection(boolean state){
+        dessinerRoute = state;
+    }
+
+    public void drawRondPoint(MouseEvent e){
+        int x = e.getX();
+        int y = e.getY();
+        listRondPoint.add(new RondPoint(x,y));
+        this.add(listRondPoint.get(listRondPoint.size()-1));
+        this.validate();
+        this.repaint();
+    }
+
+    public void clearAll(){
+        Iterator<RondPoint> iterator1 = listRondPoint.iterator();
+        Iterator<Route> iterator = listRoute.iterator();
+        while (iterator.hasNext()){
+            Route i = iterator.next();
+            iterator.remove();
+            this.remove(i);
+
+        }
+        while (iterator1.hasNext()){
+            RondPoint i = iterator1.next();
+            iterator1.remove();
+            this.remove(i);
+        }
+        this.validate();
+        this.repaint();
+    }
+
+    public void rescalle(int scalle){
+        for(Route i : listRoute){
+            i.changeScalle(scalle);
+        }
+        for (RondPoint i : listRondPoint){
+            i.changeScalle(scalle);
+        }
+        this.validate();
+        this.repaint();
+    }
+}

@@ -1,0 +1,109 @@
+package vehicules;
+
+import java.util.HashMap;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.ArrayList;
+
+//implantée sous forme de pile / file à vérifier.
+public class Itineraire {
+
+    private static final double inf = Double.POSITIVE_INFINITY;
+
+    ArrayList<Noeud> itineraire;
+
+    /**
+     * Enlève à l'itinéraire le prochain axe à parcourir
+     */
+    public void defiler(){
+    }
+
+    /**
+     * Renvoie le prochain axe à emprunter.
+     * @return l'axe
+     */
+    public Axe nextAxe(){
+        return null;
+    }
+
+    /** /!\ /!\ /!\ A FINIR /!\ /!\ /!\
+     * encore à faire le reseau
+     * Encore en travail j'attends le 
+     * @param sdeb Noeud de départ
+     * @param sfin noeud d'arrivée
+     * @param graphe le graphe qui à chaque noeud associe ses voisins
+     * @param reseau à un couple de noeud associe l'axe qui les relie
+     */
+    public Itineraire(Noeud sdeb, Noeud sfin, HashMap<Noeud,ArrayList<Noeud>> graphe, HashMap<Noeud,Axe> reseau) {
+        ArrayList<Noeud> parcouru = new ArrayList<Noeud>();
+        HashMap<Noeud,Double> distance = new HashMap<Noeud,Double>();
+        ArrayList<Noeud> adjacents = new ArrayList<Noeud>();
+        HashMap<Noeud,Noeud> predecesseur = new HashMap<Noeud,Noeud>();
+
+        initialisation(distance, predecesseur, parcouru, graphe.keySet());
+        //on a la liste des sommets adjacents
+        adjacents=graphe.get(sdeb);
+        Noeud aTraiter;
+        while (!parcouru.containsAll(graphe.keySet())) {
+            aTraiter = plusProcheSommet(adjacents, parcouru, distance);
+            parcouru.add(aTraiter);
+            adjacents = graphe.get(aTraiter);
+            for (Noeud noeud : adjacents) {
+                if (!parcouru.contains(noeud)) {
+                    if (distance.get(noeud) > distance.get(aTraiter)) {
+                        // /!\ /!\ /!\ /!\ /!\ /!\ 
+                        //reseau.get(aTraiter) représente la distance entre aTraiter et noeud
+                        // il faudra donc utiliser la matrice d'adjacence
+                        distance.put(noeud, distance.get(aTraiter)+reseau.get(aTraiter).getDistance());
+                        predecesseur.put(noeud, aTraiter);
+                    }
+                }
+            }
+        }
+        //maintenant on refait le chemin optimal
+        aTraiter = sfin;
+        while(aTraiter != sdeb) {
+            this.itineraire.add(predecesseur.get(aTraiter));
+            aTraiter=predecesseur.get(aTraiter);
+        }
+        this.itineraire = adjacents;
+    }
+
+
+    /**
+     * Cette sous fonction renvoie le sommet de parcouru
+     * @param adjacents liste des Noeuds adjacents
+     * @param parcouru liste des Noeuds parcourus
+     * @param distance hashmap des distances des Noeuds à celui de départ
+     * @return Noeud le plus proche
+     */
+    private static Noeud plusProcheSommet(ArrayList<Noeud> adjacents, ArrayList<Noeud> parcouru, HashMap<Noeud,Double> distance ) {
+        //on garde le meilleur sommet
+        double t=inf;
+        Noeud bonNoeud=null;
+        for (Noeud noeud : adjacents) {
+            if (distance.get(noeud) < t && !parcouru.contains(noeud)) {
+                bonNoeud=noeud;
+            }
+        }
+        return bonNoeud;
+    }
+
+    /**
+     * Initialise les hashmap et arraylist de 
+     * @param distance
+     * @param predecesseur
+     * @param parcouru
+     * @param listNoeud
+     */
+    private static void initialisation(HashMap<Noeud,Double> distance, HashMap<Noeud,Noeud> predecesseur, ArrayList<Noeud> parcouru, Set<Noeud> listNoeud ) {
+        distance.clear();
+        predecesseur.clear();
+        for (Noeud noeud : listNoeud) {
+            distance.put(noeud, inf);
+            predecesseur.put(noeud,null);
+        }
+        parcouru.clear();
+    }
+
+}

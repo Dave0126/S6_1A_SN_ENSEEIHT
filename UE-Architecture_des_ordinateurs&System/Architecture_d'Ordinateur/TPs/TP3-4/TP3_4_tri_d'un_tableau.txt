@@ -1,0 +1,58 @@
+// write your program here
+PILE = 0x200
+N = 10
+
+set PILE, %sp // PILE = 0x200
+set N, %r11 // input: r1 -> N
+set Tab, %r2 // input: r2 -> Tab
+call tri_tableau
+ba stop    
+
+stop:  ba stop
+Tab:  .word 6,3,5,9,53,3,46,1,34,0
+
+tri_tableau:
+            clr %r5
+            inc %r5
+            inc %r5
+            mov %r11, %r1
+            dec %r1
+tri_tableau_loop:
+            cmp %r1, %r5
+            bl tri_tableau_fin   //I<=0 fin
+            call max // input: r2->Tab & r3->M
+                          // output: r6->I_max & r7->TabMax = Tab[I_max]
+            ld [%r2+%r1], %r6
+            st %r6, [%r2+%r3]
+            st %r4, [%r2+%r1]
+            deccc %r1
+            ba tri_tableau_loop
+tri_tableau_fin:
+            ba stop
+
+max:
+            push %r12
+            push %r13
+            clr %r12 //IndiceCour <- 0
+            clr %r3 //IndiceMax <- 0
+            ld [%r2+%r12], %r13 //TabMaxCour <- Tab[0+0]
+            ld [%r2+%r12], %r4 //TabMax <- Tab[0+0]
+            inc %r12  //IndiceCour++(1)
+max_loop:  
+            cmp %r12, %r1
+            bge max_loop_fin
+            ld [%r2+%r12], %r13
+            cmp %r13, %r4
+            bl save_max
+            inc %r12                        
+            ba max_loop
+save_max:     
+            mov %r12, %r3
+            mov %r13, %r4
+            inc %r12
+            ba max_loop
+max_loop_fin: ba max_fin
+max_fin:    
+            pop %r13
+            pop %r12
+            ret

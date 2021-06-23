@@ -1,0 +1,5 @@
+Début de la vérification...
+[ERROR] Cercle.java:76:12: Balise Javadoc @param inutilisée pour 'cr'. [JavadocMethod]
+[ERROR] Cercle.java:78:40: Balise Javadoc @param manquante pour 'cd'. [JavadocMethod]
+[ERROR] Cercle.java:187: Balise Javadoc @return manquante. [JavadocMethod]
+Vérification terminée.

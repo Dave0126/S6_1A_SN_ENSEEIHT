@@ -1,0 +1,21 @@
+Les Q# font référence aux questions posées dans le fichier LISEZ-MOI.txt.
+Les pénalités '+' sont évaluées manuellement (enseignant de TP).
+Les pénalités '+' peuvent donner lieu à des pénalités définitives en V1 (si le travail est jugé insuffisant).
+
++ C3 : Qualité du source de l'application
+    + redondance (en particulier pour traitement des arguments de la ligne de commande)
+
++ C11 : Pas d'utilisation des exceptions pour la robustesse du traitement des arguments de la ligne de commande
+
++ C13 : Impossible d'ajouter de nouvelles stratégies en ne modifiant que Jouer (cf Q2)
+
++ C13 : L'arbitre ne doit ni utiliser directement, ni tester la stratégie d'un joueur (instanceof, equals, etc)
+
++ C16 : Tests unitaires de la stratégie rapide
+	+ non présents
+
++ C20 : Méthodes non courtes
+
+
++ L3 : Fichier LISEZ-MOI.txt
+    + Question 1 : The question is more "why we do not want the exception ti be verify?" and not "how do we make it not verify?"

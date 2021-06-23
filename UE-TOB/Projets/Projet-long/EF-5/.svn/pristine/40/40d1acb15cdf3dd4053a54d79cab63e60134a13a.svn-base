@@ -1,0 +1,666 @@
+package simulation.vue;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import simulation.reseau.*;
+import simulation.vehicules.*;
+
+/**
+ * panel graphique principal
+ * @version 3.0
+ * @author Ahmed CHEGGAF
+ */
+
+public class PanelDrawing extends JPanel implements MouseListener, MouseMotionListener{
+
+    List<Route> listRoute = new ArrayList<Route>();
+    List<RondPoint> listRondPoint = new ArrayList<RondPoint>();
+    List<Source> listSource = new ArrayList<Source>();
+    List<Intersection> listIntersection = new ArrayList<Intersection>();
+    MapPoint[] listPoint = new MapPoint[2];
+    int clicks = 0;
+    int indexToDraw = 1;
+    JComponent selected;
+    JComponent lastSelected;
+    int currentRoadSpeed = 50;
+    int currentSourceFreq = 10;
+    Reseau reseau = new Reseau();
+    boolean sourceOrientation = false;
+    boolean[] intersectionDirection = {true, true, true, true};
+    int irCounter = 0;
+    int currentX = 0, currentY = 0;
+    int currentOpacity = 200;
+
+    public PanelDrawing(){
+        this.addMouseListener(this);
+        this.addMouseMotionListener(this);
+        this.setVisible(true);
+    }
+
+    @Override
+    public void paint(Graphics g){
+
+        for (Route i : listRoute){
+            i.paint(g);
+        }
+        for (RondPoint i : listRondPoint){
+            i.paint(g);
+        }
+        for (Source i : listSource){
+            i.paint(g);
+        }
+        for (Intersection i : listIntersection){
+            i.paint(g);
+        }
+        Color myColor = new Color(241, 68, 68, currentOpacity);
+        g.setColor(myColor);
+
+        g.drawLine(0,currentY,this.getWidth(),currentY);
+        g.drawLine(currentX,0,currentX,this.getHeight());
+    }
+
+
+    public void mousePressed(MouseEvent e) {
+        if (e.getButton()==MouseEvent.BUTTON1){
+
+            if (indexToDraw == 1) {
+                if (selected != null) drawRoute(e);
+            }
+            else if (indexToDraw == 2) {
+                if( !(selected instanceof RondPoint)) drawRondPoint(e);
+            }
+            else if (indexToDraw == 3){
+                drawSource(e);
+            }
+            else if (indexToDraw == 4){
+                drawInrersection(e);
+            }
+        }
+        else {
+            deleteRoute(e);
+        }
+    }
+
+    public void drawRoute(MouseEvent e){
+        clicks++;
+        if (clicks == 2 ){
+            int x = e.getX();
+            int y = e.getY();
+            MapPoint deuxiemePoint = new MapPoint(x,y);
+            listPoint[1] = deuxiemePoint;
+            listRoute.add(new Route(listPoint[0].getX(),listPoint[0].getY(),
+                    listPoint[1].getX(),listPoint[1].getY(),2,20,currentRoadSpeed));
+            this.add(listRoute.get(listRoute.size()-1));
+            this.validate();
+            this.repaint();
+            clicks = 0;
+
+            Noeud n1;
+            Noeud n2;
+            if (!(lastSelected instanceof Route) && !(selected instanceof Route)){
+                n1 = reseau.getNoeud(getName(lastSelected));
+                n2 = reseau.getNoeud(getName(selected));
+                reseau.creerAxe(n1,n2,"A"+listRoute.size(),currentRoadSpeed,2);
+            }
+            else if ((lastSelected instanceof Route) && !(selected instanceof Route)){
+                irCounter++;
+                n1 = new NoeudDefault(reseau, listPoint[0].x, listPoint[0].y, "IR" + irCounter);
+                n2 = reseau.getNoeud(getName(selected));
+                reseau.creerAxe(n1,n2,"A"+listRoute.size(),currentRoadSpeed,2);
+            }
+            else if (!(lastSelected instanceof Route) && (selected instanceof Route)){
+                irCounter++;
+                n2 = new NoeudDefault(reseau, listPoint[1].x, listPoint[1].y, "IR" + irCounter);
+                n1 = reseau.getNoeud(getName(lastSelected));
+                reseau.creerAxe(n1,n2,"A"+listRoute.size(),currentRoadSpeed,2);
+            }
+            else if ((lastSelected instanceof Route) && (selected instanceof Route)){
+                irCounter++;
+                n2 = new NoeudDefault(reseau, listPoint[1].x, listPoint[1].y, "IR" + irCounter);
+                irCounter++;
+                n1 = new NoeudDefault(reseau, listPoint[0].x, listPoint[0].y, "IR" + irCounter);
+                reseau.creerAxe(n1,n2,"A"+listRoute.size(),currentRoadSpeed,2);
+            }
+
+        } else {
+            int x = e.getX();
+            int y = e.getY();
+            lastSelected = selected;
+            MapPoint premierPoint = new MapPoint(x,y);
+            listPoint[0] = premierPoint;
+        }
+    }
+
+    void deleteRoute(MouseEvent e){
+        Iterator<Route> iterator = listRoute.iterator();
+        while (iterator.hasNext()){
+            Route i = iterator.next();
+            if (isIN(i,e.getX(),e.getY())){
+                iterator.remove();
+                this.remove(i);
+                this.validate();
+                this.repaint();
+            }
+        }
+        Iterator<RondPoint> iterator1 = listRondPoint.iterator();
+        while (iterator1.hasNext()){
+            RondPoint i = iterator1.next();
+            if (isIN(i,e.getX(),e.getY())){
+                iterator1.remove();
+                this.remove(i);
+                this.validate();
+                this.repaint();
+            }
+        }
+
+        Iterator<Source> iterator2 = listSource.iterator();
+        while (iterator2.hasNext()){
+            Source i = iterator2.next();
+            if (isIN(i,e.getX(),e.getY())){
+                iterator2.remove();
+                this.remove(i);
+                this.validate();
+                this.repaint();
+            }
+        }
+        Iterator<Intersection> iterator3 = listIntersection.iterator();
+        while (iterator3.hasNext()){
+            Intersection i = iterator3.next();
+            if (isIN(i,e.getX(),e.getY())){
+                iterator3.remove();
+                this.remove(i);
+                this.validate();
+                this.repaint();
+            }
+        }
+    }
+
+    public void mouseMoved(MouseEvent e){
+        int x = e.getX();
+        int y = e.getY();
+        currentX = x;
+        currentY = y;
+        this.validate();
+        this.repaint();
+        int j = 0;
+        for (RondPoint i : listRondPoint){
+            if (isIN(i,x,y)){
+                i.whichSideToHighlight(x, y);
+                j++;
+                selected = i;
+            }
+            else{
+                i.resetHighlight();
+            }
+            this.validate();
+            this.repaint();
+        }
+        if (j==0) selected = null;
+        for (Route i : listRoute){
+            if (isIN(i,x,y)){
+                i.changeColor(true);
+                selected = i;
+            }
+            else i.changeColor(false);
+            this.validate();
+            this.repaint();
+        }
+        for (Source i : listSource){
+            if (isIN(i,x,y)){
+                i.Highlight();
+                selected = i;
+            }
+            else i.unHighlight();
+            this.validate();
+            this.repaint();
+        }
+        for (Intersection i : listIntersection){
+            if (isIN(i,x,y)){
+                i.Highlight();
+                selected = i;
+            }
+            else i.unHighlight();
+            this.validate();
+            this.repaint();
+        }
+    }
+    public boolean isIN(Route routeToCheck, int x, int y){
+        Rectangle r = new Rectangle(routeToCheck.x1-routeToCheck.centreX,
+                routeToCheck.y1-routeToCheck.centreY,routeToCheck.w,routeToCheck.h);
+
+        return r.contains(x,y);
+    }
+    public boolean isIN(Source sourceToCheck, int x, int y){
+        Rectangle r;
+        if (!sourceOrientation)
+        r = new Rectangle(sourceToCheck.x1-5,
+                sourceToCheck.y1-(sourceToCheck.rayon/2),10,(sourceToCheck.rayon));
+        else r = new Rectangle(sourceToCheck.x1-(sourceToCheck.rayon/2),
+                    sourceToCheck.y1-5,(sourceToCheck.rayon),10);
+        return r.contains(x,y);
+    }
+    public boolean isIN(RondPoint rpToCheck, int x, int y){
+        Rectangle r = new Rectangle(rpToCheck.x1-((int)(rpToCheck.rayon/2)),
+                rpToCheck.y1-((int)(rpToCheck.rayon/2)),rpToCheck.rayon,rpToCheck.rayon);
+        return r.contains(x,y);
+    }
+    public boolean isIN(Intersection intersectionToCheck, int x, int y){
+        Rectangle r = new Rectangle(intersectionToCheck.x1-(intersectionToCheck.rayon/2),
+                intersectionToCheck.y1-(intersectionToCheck.rayon/2),(intersectionToCheck.rayon),(intersectionToCheck.rayon));
+
+        return r.contains(x,y);
+    }
+    public void mouseDragged(MouseEvent e){ }
+    public void mouseReleased(MouseEvent e) { }
+    public void mouseExited(MouseEvent e) { }
+    public void mouseClicked(MouseEvent e) { }
+    public void mouseEntered(MouseEvent e) { }
+
+    public void drawRondPoint(MouseEvent e){
+        int x = e.getX();
+        int y = e.getY();
+        listRondPoint.add(new RondPoint(x,y));
+        this.add(listRondPoint.get(listRondPoint.size()-1));
+        reseau.creerNoeud(x,y,"R"+String.valueOf(listRondPoint.size()),TypeNoeud.DEFAULT);
+        this.validate();
+        this.repaint();
+    }
+
+    public void clearAll(JPanel thePanel){
+        selected = null;
+        lastSelected = null;
+        irCounter = 0;
+        Iterator<RondPoint> iterator1 = listRondPoint.iterator();
+        Iterator<Route> iterator = listRoute.iterator();
+        Iterator<Source> iterator2 = listSource.iterator();
+        Iterator<Intersection> iterator3 = listIntersection.iterator();
+        while (iterator.hasNext()){
+            Route i = iterator.next();
+            iterator.remove();
+            this.remove(i);
+
+        }
+        while (iterator1.hasNext()){
+            RondPoint i = iterator1.next();
+            iterator1.remove();
+            this.remove(i);
+        }
+        while (iterator2.hasNext()){
+            Source i = iterator2.next();
+            iterator2.remove();
+            this.remove(i);
+        }
+        while (iterator3.hasNext()){
+            Intersection i = iterator3.next();
+            iterator3.remove();
+            this.remove(i);
+        }
+        this.validate();
+        this.repaint();
+        thePanel.validate();
+        thePanel.repaint();
+    }
+
+    public void setIndex(int changeTo){
+        indexToDraw = changeTo;
+    }
+    public void drawSource(MouseEvent e){
+        int x = e.getX();
+        int y = e.getY();
+        listSource.add(new Source(x, y, currentSourceFreq,sourceOrientation));
+        this.add(listSource.get(listSource.size()-1));
+        reseau.creerNoeud(x,y,"S"+String.valueOf(listSource.size()),TypeNoeud.ENTREE_SORTIE);
+        this.validate();
+        this.repaint();
+    }
+    public void drawInrersection(MouseEvent e){
+        int x = e.getX();
+        int y = e.getY();
+        listIntersection.add(new Intersection(x, y, intersectionDirection[0],
+                intersectionDirection[1],intersectionDirection[2],intersectionDirection[3]));
+        this.add(listIntersection.get(listIntersection.size()-1));
+        reseau.creerNoeud(x,y,"I"+String.valueOf(listIntersection.size()),TypeNoeud.DEFAULT);
+        this.validate();
+        this.repaint();
+    }
+    public void changeSourceFrequency(int freq){
+        System.out.println("freq changed");
+        currentSourceFreq = freq;
+    }
+    public void changeRoadSpeed(int speed){
+        System.out.println("speed changed");
+        currentRoadSpeed = speed;
+    }
+    public void chanegsourceOrientatino(boolean changeTo){
+        sourceOrientation = changeTo;
+    }
+
+    public void changeOpacity(int newOpacity){
+        currentOpacity = newOpacity;
+    }
+    static public JPanel getPanel(int x, int y, int width, int height){
+
+        //Panel principale
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(null);
+
+        //Panel graphique ou on dessine
+
+        PanelDrawing pp = new PanelDrawing();
+        pp.setBounds(x,40,width,400);
+
+        //Panel parametrique
+
+        JPanel[] panelParametrique = {new JPanel()};
+
+        int heightPanel = 60;
+        panelParametrique[0].setBounds(0,440,width,heightPanel);
+        panelParametrique[0].setBackground(Color.orange);
+        JPanel routeParams = routePanel( 0, 440, width, heightPanel, pp);
+        JPanel rondParams = rondPanel( 0, 440, width, heightPanel, pp);
+        JPanel sourceParams = sourcePanel( 0, 440, width, heightPanel, pp);
+        JPanel interParams = intersectionPanel( 0, 440, width, heightPanel, pp);
+        panelParametrique[0] = routeParams;
+
+        //Panel contenant les buttons
+        JPanel buttonsPanel = new JPanel();
+
+        buttonsPanel.setBounds(0,0,width,40);
+        buttonsPanel.setBackground(Color.orange);
+
+        //les buttons
+        JButton buttonRoute = new JButton("Route");
+        JButton buttonSource = new JButton("Source");
+        JButton buttonRondPoint = new JButton("Rond Point");
+        JButton buttonIntersection = new JButton("Intersection");
+        JButton buttonClearAll = new JButton("Clear");
+        JSlider opacitySlider = new JSlider();
+        opacitySlider.setValue(200);
+        opacitySlider.setSize(100,10);
+        opacitySlider.setMinimum(0);
+        opacitySlider.setMaximum(255);
+
+        opacitySlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                pp.changeOpacity(opacitySlider.getValue());
+            }
+        });
+
+        // selection entre rond point et route
+        buttonRoute.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pp.setIndex(1);
+                mainPanel.remove(panelParametrique[0]);
+                panelParametrique[0] = routeParams;
+                panelParametrique[0].setVisible(true);
+                mainPanel.add(panelParametrique[0]);
+                mainPanel.setVisible(true);
+                mainPanel.validate();
+                mainPanel.repaint();
+            }
+        });
+
+        buttonRondPoint.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pp.setIndex(2);
+                mainPanel.remove(panelParametrique[0]);
+                panelParametrique[0] = rondParams;
+                panelParametrique[0].setVisible(true);
+                mainPanel.add(panelParametrique[0]);
+                mainPanel.setVisible(true);
+                mainPanel.validate();
+                mainPanel.repaint();
+            }
+        });
+        buttonSource.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pp.setIndex(3);
+                mainPanel.remove(panelParametrique[0]);
+                panelParametrique[0] = sourceParams;
+                panelParametrique[0].setVisible(true);
+                mainPanel.add(panelParametrique[0]);
+                mainPanel.setVisible(true);
+                mainPanel.validate();
+                mainPanel.repaint();
+            }
+        });
+        buttonClearAll.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pp.clearAll(mainPanel);
+                mainPanel.remove(panelParametrique[0]);
+                panelParametrique[0].setVisible(true);
+                mainPanel.add(panelParametrique[0]);
+                mainPanel.setVisible(true);
+                mainPanel.validate();
+                mainPanel.repaint();
+            }
+        });
+        buttonIntersection.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pp.setIndex(4);
+                mainPanel.remove(panelParametrique[0]);
+                panelParametrique[0] = interParams;
+                panelParametrique[0].setVisible(true);
+                mainPanel.add(panelParametrique[0]);
+                mainPanel.setVisible(true);
+                mainPanel.validate();
+                mainPanel.repaint();
+            }
+        });
+
+        buttonsPanel.add(buttonRoute);
+        buttonsPanel.add(buttonRondPoint);
+        buttonsPanel.add(buttonSource);
+        buttonsPanel.add(buttonIntersection);
+        buttonsPanel.add(buttonClearAll);
+        buttonsPanel.add(opacitySlider);
+        opacitySlider.setVisible(true);
+
+        buttonClearAll.setVisible(true);
+        buttonRondPoint.setVisible(true);
+        buttonRoute.setVisible(true);
+        buttonSource.setVisible(true);
+        buttonsPanel.setVisible(true);
+
+
+        mainPanel.add(buttonsPanel);
+        mainPanel.add(panelParametrique[0]);
+        mainPanel.add(pp);
+
+        mainPanel.setBounds(x,y,width,height);
+        return mainPanel;
+    }
+    static JPanel routePanel(int x, int y, int width, int height, PanelDrawing panelD){
+        JPanel route = new JPanel();
+        route.setBounds(x,y,width,height);
+        Color maCouleur = new Color(255, 180, 0);
+        route.setBackground(maCouleur);
+        route.setLayout(null);
+        JLabel textVitesse = new JLabel("Vitesse");
+        JTextField  textFieldVitesse = new JTextField();
+        JCheckBox feuRouge = new JCheckBox(" Feu Rouge");
+        feuRouge.setBounds(170,0,140,30);
+        feuRouge.setVisible(true);
+        textFieldVitesse.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String vitesse = textFieldVitesse.getText();
+                int speed = Integer.parseInt(vitesse);
+                panelD.changeRoadSpeed(speed);
+            }
+        });
+        textVitesse.setBounds(10,0,50,30);
+        textVitesse.setVisible(true);
+        textFieldVitesse.setBounds(60,0,100,30);
+        textFieldVitesse.setVisible(true);
+        route.add(textVitesse);
+        route.add(textFieldVitesse);
+        route.add(feuRouge);
+        route.setVisible(true);
+        return route;
+    }
+    static JPanel sourcePanel(int x, int y, int width, int height, PanelDrawing panelD){
+        JPanel source = new JPanel();
+        source.setBounds(x,y,width,height);
+        Color maCouleur = new Color(189, 158, 81);
+        source.setBackground(maCouleur);
+        source.setLayout(null);
+        JLabel textVitesse = new JLabel("Frequence");
+        JTextField  textFieldFreq = new JTextField();
+
+        JButton vertical = new JButton("Vertical");
+        JButton horizental = new JButton("Horizental");
+
+
+        textFieldFreq.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String freq = textFieldFreq.getText();
+                int frequin = Integer.parseInt(freq);
+                panelD.changeSourceFrequency(frequin);
+            }
+        });
+
+        horizental.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panelD.chanegsourceOrientatino(true);
+            }
+        });
+
+        vertical.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panelD.chanegsourceOrientatino(false);
+            }
+        });
+
+
+        textVitesse.setBounds(10,0,70,30);
+        textVitesse.setVisible(true);
+        textFieldFreq.setBounds(80,0,100,30);
+        textFieldFreq.setVisible(true);
+        vertical.setBounds(190,0,80,30);
+        horizental.setBounds(280,0,100,30);
+        vertical.setVisible(true);
+        horizental.setVisible(true);
+
+        source.add(textVitesse);
+        source.add(textFieldFreq);
+        source.add(vertical);
+        source.add(horizental);
+        source.setVisible(true);
+        return source;
+    }
+    static JPanel rondPanel(int x, int y, int width, int height, PanelDrawing panelD){
+        JPanel source = new JPanel();
+        source.setBounds(x,y,width,height);
+        Color maCouleur = new Color(231, 171, 97);
+        JLabel textRond = new JLabel("Rond point");
+        textRond.setBounds(10,0,100,30);
+        textRond.setVisible(true);
+
+        source.setBackground(maCouleur);
+        source.setLayout(null);
+        source.add(textRond);
+        source.setVisible(true);
+        return source;
+    }
+
+    static JPanel intersectionPanel(int x, int y, int width, int height, PanelDrawing panelD){
+        JPanel source = new JPanel();
+        source.setBounds(x,y,width,height);
+        Color maCouleur = new Color(210, 217, 19);
+        JLabel textRond = new JLabel("Intersection");
+        textRond.setBounds(10,0,100,30);
+        textRond.setVisible(true);
+        JCheckBox upBox = new JCheckBox("Route en Haut");
+        JCheckBox downBox = new JCheckBox("Route en Bas");
+        JCheckBox leftBox = new JCheckBox("Route à Gauche");
+        JCheckBox rightBox = new JCheckBox("Route à Droite");
+        upBox.setVisible(true);
+        downBox.setVisible(true);
+        rightBox.setVisible(true);
+        leftBox.setVisible(true);
+        int xb = 100;
+        int widthb = 140;
+        int heightb = 30;
+        upBox.setBounds(xb,0,widthb,30);
+        downBox.setBounds(xb +(1* widthb),0,widthb,heightb);
+        rightBox.setBounds(xb +(2* widthb),0,widthb,heightb);
+        leftBox.setBounds(xb +(3* widthb),0,widthb,heightb);
+
+        upBox.setSelected(true);
+        downBox.setSelected(true);
+        rightBox.setSelected(true);
+        leftBox.setSelected(true);
+
+        upBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (upBox.isSelected()) panelD.intersectionDirection[0] = true;
+                else panelD.intersectionDirection[0] = false;
+            }
+        });
+        downBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (downBox.isSelected()) panelD.intersectionDirection[1] = true;
+                else panelD.intersectionDirection[1] = false;
+            }
+        });
+        leftBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (leftBox.isSelected()) panelD.intersectionDirection[2] = true;
+                else panelD.intersectionDirection[2] = false;
+            }
+        });
+        rightBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (rightBox.isSelected()) panelD.intersectionDirection[3] = true;
+                else panelD.intersectionDirection[3] = false;
+            }
+        });
+
+        source.setBackground(maCouleur);
+        source.setLayout(null);
+        source.add(textRond);
+        source.add(upBox);
+        source.add(downBox);
+        source.add(rightBox);
+        source.add(leftBox);
+        source.setVisible(true);
+        return source;
+    }
+
+    public String getName(JComponent comp){
+        String type1 = "I";
+        int t1 = 0;
+        if (comp instanceof Source){
+            type1 = "S";
+            t1 = listSource.indexOf(comp)+1;
+        }
+        else if (comp instanceof RondPoint){
+            type1 = "R";
+            t1 = listRondPoint.indexOf(comp)+1;
+        }
+        else if (comp instanceof Intersection){
+            type1 = "I";
+            t1 = listIntersection.indexOf(comp)+1;
+        }
+        return type1+t1;
+    }
+}

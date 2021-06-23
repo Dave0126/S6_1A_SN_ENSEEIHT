@@ -1,0 +1,14 @@
+package reseau;
+
+import java.util.HashMap;
+
+public class MatriceAdjacence {
+
+    private HashMap<Noeud[],Axe> matriceAdjacence = new HashMap<Noeud[],Axe>();
+    
+    public void ajouterAxe(Noeud depart, Noeud arrivee, Axe axe) {
+    	Noeud[] tab = {depart, arrivee};
+    	this.matriceAdjacence.put(tab, axe);
+    }
+    
+}

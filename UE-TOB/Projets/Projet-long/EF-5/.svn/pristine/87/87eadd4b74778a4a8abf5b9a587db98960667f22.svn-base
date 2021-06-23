@@ -1,0 +1,42 @@
+import javax.swing.*;
+import java.awt.*;
+
+/**
+ * élément graphique représentant une source de véhicule
+ * @version 1.0
+ * @author Ahmed CHEGGAF
+ */
+
+public class Source extends JComponent {
+    int x1, y1, rayon;
+    boolean highlight = false;
+    int Frequency = 10;
+
+    public Source(int xun, int yun, int freq){
+        Frequency = freq;
+        x1 = xun;
+        y1 = yun;
+        rayon = 2*20;
+        this.setVisible(true);
+    }
+    @Override
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        Graphics2D g2D = (Graphics2D) g;
+        g2D.setColor(Color.GREEN);
+        if (highlight) g2D.setColor(Color.DARK_GRAY);
+        g2D.fillRect(x1-5, y1-(rayon/2),10, rayon);
+    }
+
+    public void Highlight(){
+        highlight = true;
+    }
+    public void unHighlight(){
+        highlight = false;
+    }
+
+    public void changeFreq(int freq){
+        Frequency = freq;
+    }
+
+}

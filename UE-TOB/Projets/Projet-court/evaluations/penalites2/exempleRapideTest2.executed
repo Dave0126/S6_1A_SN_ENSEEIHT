@@ -1,0 +1,25 @@
+
+Nombre d'allumettes restantes : 13
+Xavier, combien d'allumettes ? Xavier prend 1 allumette.
+
+Nombre d'allumettes restantes : 12
+Ordinateur prend 3 allumettes.
+
+Nombre d'allumettes restantes : 9
+Xavier, combien d'allumettes ? Xavier prend 1 allumette.
+
+Nombre d'allumettes restantes : 8
+Ordinateur prend 3 allumettes.
+
+Nombre d'allumettes restantes : 5
+Xavier, combien d'allumettes ? Xavier prend 3 allumettes.
+
+Nombre d'allumettes restantes : 2
+Ordinateur prend 1 allumette.
+
+Nombre d'allumettes restantes : 1
+Xavier, combien d'allumettes ? Exception in thread "main" java.util.NoSuchElementException: No line found
+	at java.base/java.util.Scanner.nextLine(Scanner.java:1651)
+	at allumettes.StrategieHumain.prise(StrategieHumain.java:25)
+	at allumettes.Arbitre.arbitrer(Arbitre.java:65)
+	at allumettes.Jouer.main(Jouer.java:58)

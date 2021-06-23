@@ -1,0 +1,31 @@
+// write your program here
+// Afficher leds 7_0 and 8_15
+SWITCHES = 0x90000000
+LEDS = 0xB0000000
+PILE = 0x100
+VALUE = 0b10101010 // VALUE: 8 bits
+
+        set SWITCHES, %r19
+        set LEDS, %r20
+        set VALUE, %r1
+        set PILE, %sp
+        push %r28
+        //call afficher_leds_7_0
+        call afficher_leds_8_15
+        pop %r28       
+stop:   ba stop
+
+afficher_leds_7_0:
+        push %r2
+        mov %r1, %r2
+        st %r2, [%r20]
+        pop %r2
+        ret
+        
+afficher_leds_8_15:
+        push %r2
+        mov %r1, %r2
+        sll %r2, 8, %r2 // << 8 bits
+        st %r2, [%r20]
+        pop %r2
+        ret

@@ -1,0 +1,30 @@
+package reseau;
+
+import java.util.ArrayList;
+
+public class Reseau {
+    
+	private ArrayList<Noeud> noeuds;
+	
+	private MatriceAdjacence matAdj;
+	
+	public Reseau() {
+		noeuds = new ArrayList<Noeud>();
+		matAdj = new MatriceAdjacence();
+	}
+	
+	public Noeud creerNoeud(double abscisse, double ordonnee, String nom, TypeNoeud type) {
+		Noeud noeud = NoeudFabricator.getInstance().creerNoeud(abscisse, ordonnee, nom, type);
+		this.noeuds.add(noeud);
+		return noeud;
+	}
+	
+	public Axe creerAxe(Noeud depart, Noeud arrivee, String nom, double longueur, int vitesse) {
+		Axe axe = new Axe(depart, arrivee, nom, longueur, vitesse);
+		this.matAdj.ajouterAxe(depart, arrivee, axe);
+		depart.ajouterAxeSortant(axe);
+		arrivee.ajouterAxeEntrant(axe);
+		return axe;
+	}
+	
+}

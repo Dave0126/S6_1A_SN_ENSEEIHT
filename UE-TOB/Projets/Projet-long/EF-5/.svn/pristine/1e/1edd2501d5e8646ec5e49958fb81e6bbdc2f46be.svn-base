@@ -1,0 +1,9 @@
+package reseau;
+
+public class NoeudEnSo extends Noeud {
+
+	public NoeudEnSo(double abscisse, double ordonnee, String nom) {
+		super(abscisse, ordonnee, nom);
+	}
+    
+}

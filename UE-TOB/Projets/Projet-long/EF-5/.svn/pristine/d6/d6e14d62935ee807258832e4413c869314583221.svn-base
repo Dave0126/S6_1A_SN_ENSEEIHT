@@ -1,0 +1,28 @@
+package reseau;
+
+public class NoeudFabricator {
+
+	private NoeudFabricator() {}
+	
+	private static NoeudFabricator INSTANCE;
+	
+	public static NoeudFabricator getInstance() {
+		if (INSTANCE == null) INSTANCE = new NoeudFabricator();
+		return INSTANCE;
+	}
+	
+	public Noeud creerNoeud(double abscisse, double ordonnee, String nom, TypeNoeud type) {
+		if (type == TypeNoeud.ENTREE_SORTIE) return this.creerEntreeSortie(abscisse, ordonnee, nom);
+		else if (type == TypeNoeud.DEFAULT) return this.creerNoeudDefault(abscisse, ordonnee, nom);
+		else return null;
+	}
+
+	private Noeud creerNoeudDefault(double abscisse, double ordonnee, String nom) {
+		return new NoeudDefault(abscisse, ordonnee, nom);
+	}
+
+	private Noeud creerEntreeSortie(double abscisse, double ordonnee, String nom) {
+		return new NoeudEnSo(abscisse, ordonnee, nom);
+	}
+	
+}

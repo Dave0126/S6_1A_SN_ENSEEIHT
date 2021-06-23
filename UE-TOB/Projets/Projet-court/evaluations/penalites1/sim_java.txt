@@ -1,0 +1,177 @@
+File allumettes/ConfigurationException.java: 21 tokens, 16 lines (not NL-terminated)
+File allumettes/Jeu.java: 23 tokens, 21 lines (not NL-terminated)
+File allumettes/Arbitre.java: 1068 tokens, 227 lines
+File allumettes/Strategie.java: 42 tokens, 25 lines
+File allumettes/JeuReel.java: 60 tokens, 30 lines
+File allumettes/CoupInvalideException.java: 51 tokens, 29 lines (not NL-terminated)
+File allumettes/Joueur.java: 139 tokens, 62 lines
+File allumettes/Jouer.java: 458 tokens, 100 lines (not NL-terminated)
+File allumettes/JeuProxy.java: 70 tokens, 32 lines
+Total input: 9 files (9 new, 0 old), 1932 tokens
+
+allumettes/Jouer.java: line 42-52 [91]
+allumettes/Jouer.java: line 54-64
+< 			String[] str1 = args[1].split("@");
+< 			j1.setNom(str1[0]);
+< 			Strategie st1 = new Strategie();
+< 			st1.setStrategie(str1[1]);
+< 			j1.setStrategie(st1);
+< 			String[] str2 = args[2].split("@");
+< 			j2.setNom(str2[0]);
+< 			Strategie st2 = new Strategie();
+< 			st2.setStrategie(str2[1]);
+< 			j2.setStrategie(st2);
+< 		} else {
+---
+> 			String[] str1 = args[0].split("@");
+> 			j1.setNom(str1[0]);
+> 			Strategie st1 = new Strategie();
+> 			st1.setStrategie(str1[1]);
+> 			j1.setStrategie(st1);
+> 			String[] str2 = args[1].split("@");
+> 			j2.setNom(str2[0]);
+> 			Strategie st2 = new Strategie();
+> 			st2.setStrategie(str2[1]);
+> 			j2.setStrategie(st2);
+> 		}
+
+allumettes/Arbitre.java: line 168-178 [52]
+allumettes/Arbitre.java: line 216-226
+< 			setPrise = jeu1.PRISE_MAX;
+< 			jeu1.retirer(setPrise);
+< 		} else if (jeu1.getNombreAllumettes() <= 1) {
+< 			setPrise = 1;
+< 			jeu1.retirer(setPrise);
+< 		} else {
+< 			setPrise = jeu1.getNombreAllumettes() - 1;
+< 			jeu1.retirer(setPrise);
+< 		}
+< 		return setPrise;
+< 	}
+---
+> 			setPrise = r.nextInt(jeu1.PRISE_MAX) + 1;
+> 			jeu1.retirer(setPrise);
+> 		} else if (jeu1.getNombreAllumettes() <= 1) {
+> 			setPrise = 1;
+> 			jeu1.retirer(setPrise);
+> 		} else {
+> 			setPrise = jeu1.getNombreAllumettes() - 1;
+> 			jeu1.retirer(setPrise);
+> 		}
+> 		return setPrise;
+> 	}
+
+allumettes/Arbitre.java: line 43-47 [48]
+allumettes/Arbitre.java: line 53-57
+< 		if (confiant && currentJ.strategie.getStrategie().equals("tricheur")) {
+< 			System.out.printf("[Je triche...]\n");
+< 			jeu1.retirer(jeu1.getNombreAllumettes() - 2);
+< 			System.out.printf("[Allumettes restantes : %d]\n", 
+< 					jeu1.getNombreAllumettes());
+---
+> 			if (currentJ.strategie.getStrategie().equals("tricheur")) {
+> 				System.out.printf("[Je triche...]\n");
+> 				jeu1.retirer(jeu1.getNombreAllumettes() - 2);
+> 				System.out.printf("[Allumettes restantes : %d]\n", 
+> 						jeu1.getNombreAllumettes());
+
+allumettes/Jouer.java: line 54-58 [45]
+allumettes/Jouer.java: line 59-63
+< 			String[] str1 = args[0].split("@");
+< 			j1.setNom(str1[0]);
+< 			Strategie st1 = new Strategie();
+< 			st1.setStrategie(str1[1]);
+< 			j1.setStrategie(st1);
+---
+> 			String[] str2 = args[1].split("@");
+> 			j2.setNom(str2[0]);
+> 			Strategie st2 = new Strategie();
+> 			st2.setStrategie(str2[1]);
+> 			j2.setStrategie(st2);
+
+allumettes/Arbitre.java: line 125-129 [43]
+allumettes/Arbitre.java: line 136-140
+< 					if (prise > 1) {
+< 						System.out.printf(currentJ.getNom() + " prend %d allumettes.\n", prise);
+< 					} else {
+< 						System.out.printf(currentJ.getNom() + " prend %d allumette.\n", prise);
+< 					}
+---
+> 			if (prise > 1) {
+> 				System.out.printf(currentJ.getNom() + " prend %d allumettes.\n", prise);
+> 			} else {
+> 				System.out.printf(currentJ.getNom() + " prend %d allumette.\n", prise);
+> 			}
+
+allumettes/Joueur.java: line 21-36 [32]
+allumettes/Joueur.java: line 36-51
+< 		this.strategie = strategie;
+< 	}
+< /**
+<  * Modify the name of player.	
+<  * @param nom a new name.
+<  */
+< 	public void setNom(String nom) {
+< 		assert (nom != null);
+< 		this.nom = nom;
+< 	}
+< /**
+<  * Get the name of player.
+<  * @return name of player.
+<  */
+< 	public String getNom() {
+< 		return this.nom;
+---
+> 		return this.nom;
+> 	}
+> /**
+>  * Modify the strategy of player.
+>  * @param strategie a new strategy.
+>  */
+> 	public void setStrategie(Strategie strategie) {
+> 		assert (strategie != null);
+> 		this.strategie = strategie;
+> 	}
+> /**
+>  * Get the strategy of player.
+>  * @return the strategy of player.
+>  */
+> 	public String getStrategie() {
+> 		return this.strategie.getStrategie();
+
+allumettes/Strategie.java: line 14-24 [32]
+allumettes/Joueur.java: line 35-45
+< 	public String getStrategie() {
+< 		return this.strategie;
+< 	}
+< /**
+<  * Modify the strategy.
+<  * @param st a new strateg.
+<  */
+< 	public void setStrategie(String st) {
+< 		assert (st != null);
+< 		this.strategie = st;
+< 	}
+---
+> 	public String getNom() {
+> 		return this.nom;
+> 	}
+> /**
+>  * Modify the strategy of player.
+>  * @param strategie a new strategy.
+>  */
+> 	public void setStrategie(Strategie strategie) {
+> 		assert (strategie != null);
+> 		this.strategie = strategie;
+> 	}
+
+allumettes/Arbitre.java: line 37-39 [27]
+allumettes/Arbitre.java: line 43-45
+< 		if (!confiant && currentJ.strategie.getStrategie().equals("tricheur")) {
+< 			System.out.println("[Je triche...]");
+< 			System.out.println("Abandon de la partie car " 
+---
+> 		if (confiant && currentJ.strategie.getStrategie().equals("tricheur")) {
+> 			System.out.printf("[Je triche...]\n");
+> 			jeu1.retirer(jeu1.getNombreAllumettes() - 2);
+

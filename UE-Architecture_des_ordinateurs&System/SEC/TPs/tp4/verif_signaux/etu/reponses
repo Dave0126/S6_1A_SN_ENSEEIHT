@@ -1,0 +1,15 @@
+1-Combien de SIGUSR1 et de SIGUSR2 seront ils affichés ?
+--> It will display SIGUSER1 two times, and SIGUSR2 one time.
+2-Quel sera l'ordre d'affichage ?
+--> It will display as below:
+
+    Reception 12
+
+    Reception 12
+
+    Reception 10
+
+    Salut!
+
+3-Au bout de combien de temps (à 2 secondes près) s'affichera le message de terminaison ?
+--> I think it is in 0.005 second.

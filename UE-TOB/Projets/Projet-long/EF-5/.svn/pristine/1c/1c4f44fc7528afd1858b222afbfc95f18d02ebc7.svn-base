@@ -1,0 +1,20 @@
+package reseau;
+
+/**
+ * Représente un noeud de base, sans particularité
+ * @version 0.1
+ * @author Adrien, Clément, Pierre-Louis
+ */
+public class NoeudDefault extends NoeudJonction {
+
+	/**
+	 * Crée un noeud à partir de ses coordonnées
+	 * @param abscisse Abscisse du noeud
+	 * @param ordonnee Ordonnée du noeud
+	 * @param nom Nom du noeud
+	 */
+	NoeudDefault(double abscisse, double ordonnee, String nom) {
+		super(abscisse, ordonnee, nom);
+	}
+	
+}

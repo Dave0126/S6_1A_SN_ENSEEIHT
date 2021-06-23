@@ -1,0 +1,96 @@
+package vue;
+
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+public class CreerRondP {
+
+	private JDialog createRondP;
+	private static JFrame fenetre;	// fenêtre principale
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					CreerRondP window = new CreerRondP(fenetre);
+					window.createRondP.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public CreerRondP(JFrame fenetre) {
+		initialize(fenetre);
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize(JFrame fenetre) {
+		createRondP = new JDialog(fenetre);
+		createRondP.setVisible(true);
+		createRondP.setLocationRelativeTo(null);
+		createRondP.setSize(400,200);
+		Container contenu = createRondP.getContentPane();
+		
+		// Entrée du nombre de sorties
+		JPanel entrerRondP = new JPanel();
+		entrerRondP.setBorder(BorderFactory.createTitledBorder("Caractéristiques du rond-point"));
+		JPanel pnlNbSorties = new JPanel();
+		pnlNbSorties.add(new JLabel("Nombre de sorties : "));
+		JTextField nbSorties = new JTextField();
+		nbSorties.setColumns(10);
+		pnlNbSorties.add(nbSorties);
+		entrerRondP.add(pnlNbSorties);
+		
+		JPanel pnlRondP = new JPanel();
+		pnlRondP.add(new JLabel("Rayon du rond-point : "));
+		JTextField rayon = new JTextField();
+		rayon.setColumns(10);
+		pnlRondP.add(rayon);
+		pnlRondP.add(new JLabel("m"));
+		entrerRondP.add(pnlRondP);
+		contenu.add(entrerRondP);
+		
+		// Bouton OK
+		JPanel ok = new JPanel();
+		ok.setLayout(new FlowLayout());
+		JButton btnOk = new JButton("OK");
+		ok.add(btnOk);
+		btnOk.addActionListener(this::valider);
+		
+		// Bouton annuler
+		JButton btnAnnuler = new JButton("Annuler");
+		ok.add(btnAnnuler);
+		btnAnnuler.addActionListener(this::annuler);
+		contenu.add(ok, BorderLayout.SOUTH);
+	}
+	
+	private void valider(ActionEvent e) {
+		createRondP.setVisible(false);				
+	}
+	
+	private void annuler(ActionEvent e) {
+		createRondP.setVisible(false);				
+	}
+
+}

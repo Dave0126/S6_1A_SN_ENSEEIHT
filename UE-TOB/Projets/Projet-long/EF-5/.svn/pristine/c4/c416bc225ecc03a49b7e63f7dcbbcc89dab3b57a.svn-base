@@ -1,0 +1,27 @@
+package vue;
+
+import javax.swing.JLabel;
+
+public class Map {
+	
+	/** Cases de la map */
+	private final JLabel[][] cases = new JLabel[50][50];
+	
+	public Map() {
+		initialize();
+	}
+
+	/**
+	 * Initialiser le contenu de la map.
+	 */
+	private void initialize() {
+		
+		// Créer les cases de la map
+		for (int i = 0; i < this.cases.length; i++) {
+			for (int j = 0; j < this.cases[i].length; j++) {
+				this.cases[i][j] = new JLabel();
+			}
+		}
+	}
+
+}	

@@ -1,0 +1,56 @@
+package reseau;
+
+import java.util.ArrayList;
+
+/**
+ * @version 0.1
+ * @author Adrien, Clément, Pierre-Louis
+ */
+public abstract class Noeud {
+
+
+    
+	private String nom;
+	private double abscisse;
+	private double ordonnee;
+	
+	private ArrayList<Axe> axesEntrants;
+	private ArrayList<Axe> axesSortants;
+	
+	public Noeud(double abscisse, double ordonnee, String nom) {
+		this.abscisse = abscisse;
+		this.ordonnee = ordonnee;
+		this.nom = nom;
+		this.axesEntrants = new ArrayList<Axe>();
+		this.axesSortants = new ArrayList<Axe>();
+	}
+	
+    public String getNom() {
+        return this.nom;
+    }
+
+    public double getAbscisse() {
+        return this.abscisse;
+    }
+
+    public double getOrdonnee() {
+        return this.ordonnee;
+    }
+
+    /**
+     * Ajouter un Axe sortant.
+     * @param axe
+     */
+	void ajouterAxeEntrant(Axe axe) {
+		axesEntrants.add(axe);
+	}
+	
+    /**
+     * Ajouter un Axe entrant.
+     * @param axe
+     */
+	void ajouterAxeSortant(Axe axe) {
+		axesSortants.add(axe);
+	}
+	
+}

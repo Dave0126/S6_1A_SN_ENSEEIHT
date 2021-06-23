@@ -1,0 +1,39 @@
+// write your program here
+// To realise the crible d'Eratosthene
+n = 10
+set TAB, %r1
+set TAB_empty, %r10
+
+TAB: .word 6,3,5,9,53,3,46,1,34,0
+TAB_empty: .word 0,0,0,0,0,0,0,0,0,0
+
+loop_1:  
+	   ld [%r10 + %r2], %r6
+      cmp %r0,%r6
+      blu finsi
+      ld [%r1 + %r2], %r8
+      add %r2,1,%r3        // j = i+1
+loop_2:
+	   ld [%r1 + %r3], %r5
+loop_3:
+	   cmp %r5,%r8
+      ble stop_loop_3
+      ld [%r1 + %r2], %r4
+      add %r8,%r4,%r8
+      ba loop_3
+stop_loop_3:
+	    cmp %r8, %r5
+	    bne finsi_2
+	    set 1,%r9
+	    st %r9,[%r10 + %r3]
+
+finsi_2:       
+	    inc %r3
+	    cmp %r3, n
+	    blu loop_2
+finsi :
+	    inc %r2
+	    cmp %r2, n-1
+	    blu loop_1
+stop:
+	    ba stop

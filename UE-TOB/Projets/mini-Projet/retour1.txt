@@ -1,0 +1,21 @@
+# Remarques générales ################################################
+
+Tenir compte des remarques générales disponibles via Moodle
+et de l'évaluation automatique disponible sur votre SVN via svn update.
+
+Elles ne sont pas reprises ici !
+
+
+# LISEZ-MOI.txt ######################################################
+
+* Question 1 : Nous ne demandons pas le diagramme de classe, mais juste le nom du lien entre Cercle et Point et une justification de la réponse.
+
+* Question 2 : Réponse fausse
+
+
+# Remarques supplémentaires ##########################################
+
+* Il manque la Javadoc pour décrire le contenu de la classe.
+* Il faut utiliser la Javadoc, et non de simples commentaires, pour les attributs.
+* "This method can return / get / set " -> "This method returns / returns / sets "
+* Il faut respecter les noms de méthodes données dans le sujet.

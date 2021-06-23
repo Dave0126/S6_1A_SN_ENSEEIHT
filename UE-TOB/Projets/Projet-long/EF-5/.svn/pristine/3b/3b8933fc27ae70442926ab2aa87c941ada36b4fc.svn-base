@@ -1,0 +1,20 @@
+package reseau;
+
+/**
+ * Représente un noeud de jonction, en opposition aux noeuds d'entrée-sortie
+ * @version 0.1
+ * @author Adrien, Clément, Pierre-Louis
+ */
+public abstract class NoeudJonction extends Noeud {
+
+	/**
+	 * Crée un noeud à partir de ses coordonnées
+	 * @param abscisse Abscisse du noeud
+	 * @param ordonnee Ordonnée du noeud
+	 * @param nom Nom du noeud
+	 */
+	NoeudJonction(double abscisse, double ordonnee, String nom) {
+		super(abscisse, ordonnee, nom);
+	}
+    
+}

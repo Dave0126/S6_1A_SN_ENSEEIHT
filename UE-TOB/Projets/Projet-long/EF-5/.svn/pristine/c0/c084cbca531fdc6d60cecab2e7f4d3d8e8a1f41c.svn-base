@@ -1,0 +1,117 @@
+package vehicules;
+import reseau.Axe;
+import reseau.Noeud;
+import java.util.*;
+
+public class Itineraire2 {
+
+    List<Noeud> lesNoeuds;
+    List<Axe> lesAxes;
+
+    Set<Noeud> noeudTraite = new HashSet<Noeud>();
+    Set<Noeud> noeudPasencoreTraite = new HashSet<Noeud>();
+    Map<Noeud, Double> distance = new HashMap<Noeud, Double>();
+    Map<Noeud, Noeud> predecesseurs = new HashMap<Noeud, Noeud>();
+
+    Noeud debut;
+    Noeud fin;
+
+    public Itineraire2(Graphe e, Noeud deb, Noeud arr){
+        lesNoeuds = e.getNoeuds();
+        lesAxes = e.getAxes();
+        debut = deb;
+        fin = arr;
+        dijkstra(deb, arr);
+    }
+
+    /**
+     * L'ensemble de noeuds qui constitue le chemin le plus court
+     * @return Chemin le plus court pour arrivée vers le destination
+     */
+    public LinkedList<Noeud> getPath() {
+
+        LinkedList<Noeud> chemin = new LinkedList<Noeud>();
+        Noeud step = fin;
+        if (predecesseurs.get(step) == null) {
+            return null;
+        }
+        chemin.add(step);
+        while (predecesseurs.get(step) != null) {
+            step = predecesseurs.get(step);
+            chemin.add(step);
+        }
+        Collections.reverse(chemin);
+        return chemin;
+    }
+
+    /**
+     * l'algorithm de dijkstra principale
+     * @param start le noeud du debut
+     * @param Dest le noeud d'arrivee
+     */
+
+    public void dijkstra(Noeud start, Noeud Dest){
+        //on commence par le debut avec 0 comme valeur
+
+        distance.put(start, 0.0);
+        noeudPasencoreTraite.add(start);
+
+        //tant qu'on n'a pas tout traité, on traite les noeuds restant
+
+        while (noeudPasencoreTraite.size() > 0) {
+            Noeud noeud = getMinimum(noeudPasencoreTraite,distance);
+            noeudTraite.add(noeud);
+            noeudPasencoreTraite.remove(noeud);
+
+            //on cherche le noeud avec la plus petite distance du noeud a traite
+
+            List<Noeud> adjacentNoeuds = getVoisins(noeud, lesAxes, noeudTraite);
+            for (Noeud target : adjacentNoeuds) {
+                if (getShortestDistance(target) > getShortestDistance(noeud)
+                        + noeud.distance(target)) {
+                    distance.put(target, distance.get(noeud)
+                            + noeud.distance(target));
+                    predecesseurs.put(target, noeud);
+                    noeudPasencoreTraite.add(target);
+                }
+            }
+        }
+    }
+
+
+    private List<Noeud> getVoisins(Noeud n, List<Axe> axes, Set<Noeud> noeudTraite) {
+        List<Noeud> voisins = new ArrayList<Noeud>();
+        for (Axe a : axes) {
+            if (a.getDepart().equals(n)
+                    && !noeudTraite.contains(a.getArrivee())) {
+                voisins.add(a.getArrivee());
+            }
+        }
+        return voisins;
+    }
+
+    private Noeud getMinimum(Set<Noeud> ensembleNoeud, Map<Noeud, Double> distance) {
+        Noeud minimum = null;
+        for (Noeud n : ensembleNoeud) {
+            if (minimum == null) {
+                minimum = n;
+            } else {
+                if (distance.get(n) < distance.get(minimum)) {
+                    minimum = n;
+                }
+            }
+        }
+        return minimum;
+    }
+
+    private double getShortestDistance(Noeud destination) {
+        Double d = distance.get(destination);
+        if (d == null) {
+            return Double.MAX_VALUE;
+        } else {
+            return d;
+        }
+    }
+
+
+}

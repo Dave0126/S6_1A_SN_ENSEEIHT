@@ -1,0 +1,98 @@
+package vehicules;
+
+import org.junit.*;
+import reseau.*;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import static org.junit.Assert.*;
+
+public class ItineraireTest {
+
+    Graphe e;
+    Itineraire2 i05;
+    LinkedList<Noeud> I05;
+    Noeud n0,n1,n2,n3,n4,n5,n6,n7;
+    Axe a0,a1,a2,a3,a4,a5,a6,a7,a8;
+    List<Noeud> N;
+    List<Axe> A;
+
+    @Before
+    public void initialiserReseau() {
+        Reseau reseau1 = new Reseau();
+
+         n0 = reseau1.creerNoeud( 0.0, 0.0 , "0", TypeNoeud.DEFAULT);
+         n1 = reseau1.creerNoeud( 2.0, 0.0, "1", TypeNoeud.DEFAULT);
+         n2 = reseau1.creerNoeud( 0.0, 2.0, "2", TypeNoeud.DEFAULT);
+         n3 = reseau1.creerNoeud( 2.0, 2.0, "3", TypeNoeud.DEFAULT);
+         n4 = reseau1.creerNoeud( 1.0, 4.0, "4", TypeNoeud.DEFAULT);
+         n5 = reseau1.creerNoeud( 0.0, 6.0 , "5", TypeNoeud.DEFAULT);
+         n6 = reseau1.creerNoeud( 4.0, 4.0, "6", TypeNoeud.DEFAULT);
+         n7 = reseau1.creerNoeud( 2.0, 6.0, "7", TypeNoeud.DEFAULT);
+
+         a0 = reseau1.creerAxe(n0,n1,"0",50,2);
+         a1 = reseau1.creerAxe(n0,n2,"1",50,2);
+         a2 = reseau1.creerAxe(n1,n3,"2",50,2);
+         a3 = reseau1.creerAxe(n2,n4,"3",50,2);
+         a4 = reseau1.creerAxe(n3,n4,"4",50,2);
+         a5 = reseau1.creerAxe(n4,n5,"5",50,2);
+         a6 = reseau1.creerAxe(n4,n6,"6",50,2);
+         a7 = reseau1.creerAxe(n6,n7,"7",50,2);
+         a8 = reseau1.creerAxe(n7,n5,"8",50,2);
+
+         N = new ArrayList<Noeud>();
+        N.add(n0);
+        N.add(n1);
+        N.add(n2);
+        N.add(n3);
+        N.add(n4);
+        N.add(n5);
+        N.add(n6);
+        N.add(n7);
+
+         A = new ArrayList<Axe>();
+        A.add(a0);
+        A.add(a1);
+        A.add(a2);
+        A.add(a3);
+        A.add(a4);
+        A.add(a5);
+        A.add(a6);
+        A.add(a7);
+        A.add(a8);
+
+        e = new Graphe(N, A);
+        Itineraire2 i05 = new Itineraire2(e,n0,n5);
+        I05 = i05.getPath();
+    }
+
+
+
+    @Test
+    public void testItiniraire05_1() {
+        String resultat ="";
+        for(Noeud x : I05){
+            resultat += x.getNom()+" -> ";
+        }
+        resultat += "Done";
+        assertEquals(resultat,"0 -> 2 -> 4 -> 5 -> Done");
+    }
+
+    @Test
+    public void testItiniraire05_2() {
+        //on enleve l'axe 5 et on recalcule le chemin
+        A.remove(a5);
+        Itineraire2 i05 = new Itineraire2(e,n0,n5);
+        I05 = i05.getPath();
+
+        String resultat2 ="";
+        for(Noeud x : I05){
+            resultat2 += x.getNom()+" -> ";
+        }
+        resultat2 += "Done";
+        assertEquals(resultat2,"0 -> 2 -> 4 -> 6 -> 7 -> 5 -> Done");
+    }
+
+}

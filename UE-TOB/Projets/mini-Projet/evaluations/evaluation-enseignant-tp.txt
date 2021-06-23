@@ -1,0 +1,30 @@
+=====[ Relecture du code ]======================================================
+
+Remarque : n points de pénalité ==> n points perdus sur la note.
+
+Fichier LISEZ-MOI.txt :
+    question 1 : réponse fausse : -1 pt.
+
+Commentaire de documentation : 
+    * Commentaires non pertinents sur la description de la classe: 	-0.5
+
+Forme 
+    * choix des identifiants		-1
+	en particulier les paramètres de creerCercle (voir retour fait aux étudiants)
+    * variable locale inutile		-0.5
+            double perimetre = 2*PI*rayon;
+	    return perimetre;
+    * variables locales déclarées et non initialisées : -0.5 pt
+		double xcord;
+		double ycord;
+		xcord = this.center.getX();
+		ycord = this.center.getY();
+    * utilisation d'un if au lieu d'une expression booléenne : -0.5 pt
+
+Autres erreurs : 
+    * Mauvaise utilisation des assert : -0.5 pt
+
+
+Total pénalités : 4.5
+
+--------------------------------------------------------------------------------

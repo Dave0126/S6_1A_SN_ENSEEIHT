@@ -1,0 +1,37 @@
+package reseau;
+
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.TreeSet;
+import java.util.Iterator;
+import java.util.Set;
+import vehicules.Vehicule;
+
+public class Voie {
+    /** Ensemble des vehicules sur la voie */
+    private TreeSet<VehiculeSurVoie> ensVehicule;
+    
+    /**
+     * Créer la voie
+     */
+    public Voie() {
+        this.ensVehicule = new TreeSet<VehiculeSurVoie>();
+    }
+    
+    /**
+     * Ajouter un vehicule 
+     * @param vehicule le vehicule à ajouter
+     * @param position la position du vehicule
+     */
+    public void addVehicule(Vehicule vehicule, double position) {
+        this.ensVehicule.add(new VehiculeSurVoie(vehicule, position));
+    }
+
+    /**
+     * Supprimer un vehicule
+     * @param vehicule le vehicule à supprimer
+     */
+    public void dellVehicule(Vehicule vehicule) {
+        this.ensVehicule.remove(vehicule);
+    }
+}

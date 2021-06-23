@@ -1,0 +1,54 @@
+package simulation.vue;
+import javax.swing.*;
+import java.awt.*;
+
+/**
+ * élément graphique représentant une source de véhicule
+ * @version 1.0
+ * @author Ahmed CHEGGAF
+ */
+
+public class Source extends JComponent {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	int x1, y1, rayon;
+    boolean highlight = false;
+    double frequency;
+    boolean flat;
+
+    public Source(int xun, int yun, double freq, boolean orientation){
+        frequency = freq;
+        x1 = xun;
+        y1 = yun;
+        rayon = 30;
+        flat = orientation;
+        this.setVisible(true);
+    }
+    @Override
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        Graphics2D g2D = (Graphics2D) g;
+        Color myColor = new Color(0, 198, 141);
+        g2D.setColor(myColor);
+        if (highlight) g2D.setColor(Color.DARK_GRAY);
+        if (!flat) g2D.fillRect(x1-5, y1-(rayon/2),10, rayon);
+        else g2D.fillRect(x1-(rayon/2), y1-5,rayon, 10);
+
+    }
+
+    public void Highlight(){
+        highlight = true;
+    }
+    public void unHighlight(){
+        highlight = false;
+    }
+
+    public void changeFreq(int freq){
+        frequency = freq;
+    }
+
+
+}

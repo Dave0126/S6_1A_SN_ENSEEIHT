@@ -1,0 +1,333 @@
+File allumettes/ConfigurationException.java: 21 tokens, 15 lines
+File allumettes/Jeu.java: 23 tokens, 20 lines
+File allumettes/Arbitre.java: 527 tokens, 124 lines (not NL-terminated)
+File allumettes/Strategie.java: 19 tokens, 16 lines
+File allumettes/StrategieTricheur.java: 76 tokens, 32 lines
+File allumettes/JeuReel.java: 135 tokens, 39 lines
+File allumettes/OperationInterditeException.java: 19 tokens, 9 lines
+File allumettes/CoupInvalideException.java: 51 tokens, 28 lines
+File allumettes/Joueur.java: 138 tokens, 62 lines
+File allumettes/SomeoneCheatsException.java: 19 tokens, 8 lines
+File allumettes/StrategieHumain.java: 118 tokens, 39 lines
+File allumettes/Jouer.java: 680 tokens, 154 lines
+File allumettes/JeuProxy.java: 70 tokens, 32 lines
+File allumettes/StrategieNaif.java: 121 tokens, 39 lines
+File allumettes/StrategieRapide.java: 98 tokens, 35 lines
+File allumettes/StrategieExpert.java: 122 tokens, 38 lines
+Total input: 16 files (16 new, 0 old), 2237 tokens
+
+allumettes/Jouer.java: line 34-41 [52]
+allumettes/Jouer.java: line 45-52
+< 			if (args[0].equals("-confiant")) {
+< 				String[] nameAndStrategie1 = splitNameAndStrategie(args[1]);
+< 				String[] nameAndStrategie2 = splitNameAndStrategie(args[2]);
+< 				if (nameAndStrategie1.length != 2 || nameAndStrategie2.length != 2) {
+< 					throw new ConfigurationException(
+< 							"La forme de joueur n'est pas correcte");
+< 				}
+< 				confiant = true;
+---
+> 			} else {
+> 				String[] nameAndStrategie1 = splitNameAndStrategie(args[0]);
+> 				String[] nameAndStrategie2 = splitNameAndStrategie(args[1]);
+> 				if (nameAndStrategie1.length != 2 || nameAndStrategie1.length != 2) {
+> 					throw new ConfigurationException(
+> 							"La forme de joueur n'est pas correcte");
+> 				}
+> 				confiant = false;
+
+allumettes/StrategieNaif.java: line 1-27 [50]
+allumettes/StrategieExpert.java: line 1-27
+< package allumettes;
+< 
+< import java.util.Random;
+< 
+< public class StrategieNaif implements Strategie {
+< 	/** the strategy. */
+< 	private String strategie;
+< 	/** the constructor of StrategieNaif. */
+< 	public StrategieNaif() {
+< 		this.strategie = "naif";
+< 	}
+< /**
+<  * Get a String of strategy.
+<  * @return strategy in String.
+<  */
+< 	public String getStrategie() {
+< 		return this.strategie;
+< 	}
+< 	/**
+< 	 * This method calculates how many matches computer can take in the mode of
+< 	 * naif.
+< 	 * @param jeu1     the current game
+< 	 * @return setPrise the number been calculated.
+< 	 * @throws CoupInvalideException Son of Exception.
+< 	 */
+< 	public int prise(Jeu jeu1) throws CoupInvalideException {
+< 		Random r = new Random();
+---
+> package allumettes;
+> 
+> import java.util.Random;
+> 
+> public class StrategieExpert implements Strategie {
+> 	/** the strategy. */
+> 	private String strategie;
+> 	/** the constructor of StrategieExpert. */
+> 	public StrategieExpert() {
+> 		this.strategie = "expert";
+> 	}
+> 	/**
+> 	 * Get a String of strategy.
+> 	 * @return strategy in String.
+> 	 */
+> 	public String getStrategie() {
+> 		return this.strategie;
+> 	}
+> 	/**
+> 	 * This method calculates how many matches computer can take in the mode of
+> 	 * expert.
+> 	 * @param jeu1     the current game
+> 	 * @return setPrise the number been calculated.
+> 	 * @throws CoupInvalideException Son of Exception.
+> 	 */
+> 	public int prise(Jeu jeu1) throws CoupInvalideException {
+> 		Random r = new Random();
+
+allumettes/StrategieTricheur.java: line 1-24 [43]
+allumettes/StrategieNaif.java: line 1-26
+< package allumettes;
+< 
+< 
+< public class StrategieTricheur implements Strategie {
+< 	/** the strategy. */
+< 	private String strategie;
+< 	/** the constructor of StrategieTricheur. */
+< 	public StrategieTricheur() {
+< 		this.strategie = "tricheur";
+< 	}
+< 	/**
+< 	 * Get a String of strategy.
+< 	 * @return strategy in String.
+< 	 */
+< 	public String getStrategie() {
+< 		return this.strategie;
+< 	}
+< 	/**
+< 	 * This method deal with the case of strategy == tricheur.
+< 	 * @param jeu     the current game
+< 	 * @return setPrise the number been calculated.
+< 	 * @throws CoupInvalideException
+< 	 */
+< 	public int prise(Jeu jeu) throws CoupInvalideException {
+---
+> package allumettes;
+> 
+> import java.util.Random;
+> 
+> public class StrategieNaif implements Strategie {
+> 	/** the strategy. */
+> 	private String strategie;
+> 	/** the constructor of StrategieNaif. */
+> 	public StrategieNaif() {
+> 		this.strategie = "naif";
+> 	}
+> /**
+>  * Get a String of strategy.
+>  * @return strategy in String.
+>  */
+> 	public String getStrategie() {
+> 		return this.strategie;
+> 	}
+> 	/**
+> 	 * This method calculates how many matches computer can take in the mode of
+> 	 * naif.
+> 	 * @param jeu1     the current game
+> 	 * @return setPrise the number been calculated.
+> 	 * @throws CoupInvalideException Son of Exception.
+> 	 */
+> 	public int prise(Jeu jeu1) throws CoupInvalideException {
+
+allumettes/StrategieRapide.java: line 1-24 [43]
+allumettes/StrategieExpert.java: line 1-26
+< package allumettes;
+< 
+< public class StrategieRapide implements Strategie {
+< 	/** the strategy. */
+< 	private String strategie;
+< 	/** the constructor of StrategieRaipde. */
+< 	public StrategieRapide() {
+< 		this.strategie = "rapide";
+< 	}
+< /**
+<  * Get a String of strategy.
+<  * @return strategy in String.
+<  */
+< 	public String getStrategie() {
+< 		return this.strategie;
+< 	}
+< 	/**
+< 	 * This method calculates how many matches computer can take in the mode of
+< 	 * rapide.
+< 	 * @param jeu1     the current game
+< 	 * @return setPrise the number been calculated.
+< 	 * @throws CoupInvalideException
+< 	 */
+< 	public int prise(Jeu jeu1) throws CoupInvalideException {
+---
+> package allumettes;
+> 
+> import java.util.Random;
+> 
+> public class StrategieExpert implements Strategie {
+> 	/** the strategy. */
+> 	private String strategie;
+> 	/** the constructor of StrategieExpert. */
+> 	public StrategieExpert() {
+> 		this.strategie = "expert";
+> 	}
+> 	/**
+> 	 * Get a String of strategy.
+> 	 * @return strategy in String.
+> 	 */
+> 	public String getStrategie() {
+> 		return this.strategie;
+> 	}
+> 	/**
+> 	 * This method calculates how many matches computer can take in the mode of
+> 	 * expert.
+> 	 * @param jeu1     the current game
+> 	 * @return setPrise the number been calculated.
+> 	 * @throws CoupInvalideException Son of Exception.
+> 	 */
+> 	public int prise(Jeu jeu1) throws CoupInvalideException {
+
+allumettes/Arbitre.java: line 94-100 [43]
+allumettes/Arbitre.java: line 105-109
+< 				if (prise > 1) {
+< 					System.out.printf(currentJ.getNom()
+< 							+ " prend %d allumettes.\n", prise);
+< 				} else {
+< 					System.out.printf(currentJ.getNom()
+< 							+ " prend %d allumette.\n", prise);
+< 				}
+---
+> 			if (prise > 1) {
+> 				System.out.printf(currentJ.getNom() + " prend %d allumettes.\n", prise);
+> 			} else {
+> 				System.out.printf(currentJ.getNom() + " prend %d allumette.\n", prise);
+> 			}
+
+allumettes/Arbitre.java: line 33-46 [42]
+allumettes/Joueur.java: line 17-27
+< 	public Arbitre(Joueur j1, Joueur j2) {
+< 		assert (j1 != null);
+< 		assert (j2 != null);
+< 		this.j1 = j1;
+< 		this.j2 = j2;
+< 	}
+< 
+< 
+< 	/**
+< 	 * @param jeu1     Current game. -confiant -> JeuReel
+< 	 * the other case -> JeuProxy
+< 	 * @throws CoupInvalideException Son of Exception.
+< 	 */
+< 	public void arbitrer(Jeu jeu1)
+---
+> 	public Joueur(String nom, Strategie strategie) {
+> 		assert (nom != null);
+> 		assert (strategie != null);
+> 		this.nom = nom;
+> 		this.strategie = strategie;
+> 	}
+> /**
+>  * Modify the name of player.
+>  * @param nom a new name.
+>  */
+> 	public void setNom(String nom) {
+
+allumettes/StrategieNaif.java: line 32-39 [34]
+allumettes/StrategieRapide.java: line 28-35
+< 		} else if (jeu1.getNombreAllumettes() <= 1) {
+< 			setPrise = 1;
+< 		} else {
+< 			setPrise = jeu1.getNombreAllumettes() - 1;
+< 		}
+< 		return setPrise;
+< 	}
+< }
+---
+> 		} else if (jeu1.getNombreAllumettes() <= 1) {
+> 			setPrise = 1;
+> 		} else {
+> 			setPrise = jeu1.getNombreAllumettes() - 1;
+> 		}
+> 		return setPrise;
+> 	}
+> }
+
+allumettes/Jouer.java: line 105-109 [33]
+allumettes/Jouer.java: line 109-113
+< 		if (strategie.equals("rapide")) {
+< 			return new StrategieRapide();
+< 		} else if (strategie.equals("naif")) {
+< 			return new StrategieNaif();
+< 		} else if (strategie.equals("expert")) {
+---
+> 		} else if (strategie.equals("expert")) {
+> 			return new StrategieExpert();
+> 		} else if (strategie.equals("tricheur")) {
+> 			return new StrategieTricheur();
+> 		} else {
+
+allumettes/Joueur.java: line 21-36 [32]
+allumettes/Joueur.java: line 36-51
+< 		this.strategie = strategie;
+< 	}
+< /**
+<  * Modify the name of player.
+<  * @param nom a new name.
+<  */
+< 	public void setNom(String nom) {
+< 		assert (nom != null);
+< 		this.nom = nom;
+< 	}
+< /**
+<  * Get the name of player.
+<  * @return name of player.
+<  */
+< 	public String getNom() {
+< 		return this.nom;
+---
+> 		return this.nom;
+> 	}
+> /**
+>  * Modify the strategy of player.
+>  * @param strategie a new strategy.
+>  */
+> 	public void setStrategie(Strategie strategie) {
+> 		assert (strategie != null);
+> 		this.strategie = strategie;
+> 	}
+> /**
+>  * Get the strategy of player.
+>  * @return the strategy of player.
+>  */
+> 	public String getStrategie() {
+> 		return this.strategie.getStrategie();
+
+allumettes/Arbitre.java: line 21-25 [26]
+allumettes/Arbitre.java: line 33-37
+< 	public Arbitre(Joueur j1, Joueur j2, boolean confiant) {
+< 		assert (j1 != null);
+< 		assert (j2 != null);
+< 		this.j1 = j1;
+< 		this.j2 = j2;
+---
+> 	public Arbitre(Joueur j1, Joueur j2) {
+> 		assert (j1 != null);
+> 		assert (j2 != null);
+> 		this.j1 = j1;
+> 		this.j2 = j2;
+

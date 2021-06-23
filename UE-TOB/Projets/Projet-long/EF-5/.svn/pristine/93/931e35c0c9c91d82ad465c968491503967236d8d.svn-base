@@ -1,0 +1,104 @@
+package reseau;
+
+import java.util.ArrayList;
+
+
+/**
+ * Représente le réseau, fourni les moyens d'acceder aux éléments du réseau, et d'en créer.
+ * @version 0.1
+ * @author Adrien, Clément, Pierre-Louis
+ */
+public class Reseau {
+    
+	/**
+	 * Liste des noeuds du réseau
+	 */
+	private ArrayList<Noeud> noeuds;
+	
+	/**
+	 * Matrice d'adjacence listant les noeuds reliés entre eux ainsi que les axes.
+	 */
+	private MatriceAdjacence matAdj;
+	
+	/**
+	 * Créé et initialise le réseau.
+	 */
+	public Reseau() {
+		noeuds = new ArrayList<Noeud>();
+		matAdj = new MatriceAdjacence();
+	}
+	
+	/**
+	 * Créé et joute un noeud au réseau 
+	 * @param abscisse Abscisse du noeud
+	 * @param ordonnee Ordonnée du noeud
+	 * @param nom Nom du noeud
+	 * @param type Type de noeud à créer
+	 * @return le Noeud nouvellement créé
+	 */
+	public Noeud creerNoeud(double abscisse, double ordonnee, String nom, TypeNoeud type) {
+		Noeud noeud = NoeudFactory.getInstance().creerNoeud(abscisse, ordonnee, nom, type);
+		this.noeuds.add(noeud);
+		return noeud;
+	}
+	
+	/**
+	 * Créé un axe et l'ajoute au réseau
+     * @param depart Noeud du depart de l'axe
+     * @param arrivee Noeud à la fin de l'axe
+     * @param nom Nom du noeud
+     * @param vitesse maximale autorisée sur l'axe
+     * @param nbVoies nombre de voie sur l'axe
+	 * @return l'Axe nouvellement créé
+	 */
+	public Axe creerAxe(Noeud depart, Noeud arrivee, String nom, int vitesse, int nbVoies) {
+		Axe axe = new Axe(depart, arrivee, nom, vitesse, nbVoies);
+		this.matAdj.ajouterAxe(depart, arrivee, axe);
+		depart.ajouterAxeSortant(axe);
+		arrivee.ajouterAxeEntrant(axe);
+		return axe;
+	}
+	
+	/**
+	 * Créé un axe et l'ajoute au réseau. Définit le nombre de voie à 1.
+     * @param depart Noeud du depart de l'axe
+     * @param arrivee Noeud à la fin de l'axe
+     * @param nom Nom du noeud
+     * @param vitesse maximale autorisée sur l'axe
+	 * @return l'Axe nouvellement créé
+	 */
+	public Axe creerAxe(Noeud depart, Noeud arrivee, String nom, int vitesse) {
+		return this.creerAxe(depart, arrivee, nom, vitesse, 1);
+	}
+
+	/**
+	 * Obtient un axe en fonction de ses noeuds de départ et d'arrivée
+	 * @param depart Le Noeud de départ
+	 * @param arrivee Le Noeud d'arrivée
+	 * @return l'Axe recherché s'il existe, null sinon.
+	 */
+	public Axe getAxe(Noeud depart, Noeud arrivee) {
+		return this.matAdj.getAxe(depart, arrivee);
+	}
+	
+	/**
+	 * Obtient un Noeud à partir de son nom
+	 * @param nom le Nom du Noeud
+	 * @return le Noeud recherché s'il existe, null sinon.
+	 */
+	public Noeud getNoeud(String nom) {
+		Noeud resultat = null;
+		for (Noeud i: this.noeuds) {
+			if (i.getNom().equals(nom)) {
+				resultat = i;
+			}
+		}
+		return resultat;
+	}
+
+	public ArrayList<Noeud> getListNoeud() {
+		ArrayList<Noeud> tousLesNoeuds = new ArrayList<Noeud>();
+		tousLesNoeuds.addAll(this.noeuds);
+		return tousLesNoeuds;
+	}
+}

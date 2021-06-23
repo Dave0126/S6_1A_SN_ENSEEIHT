@@ -1,0 +1,95 @@
+package vue;
+
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+public class CreerRoute {
+
+	private JDialog createRoute;
+	private static JFrame fenetre;	// fenêtre principale
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					CreerRoute window = new CreerRoute(fenetre);
+					window.createRoute.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public CreerRoute(JFrame fenetre) {
+		initialize(fenetre);
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize(JFrame fenetre) {
+		createRoute = new JDialog(fenetre);
+		createRoute.setVisible(true); 
+		createRoute.setLocationRelativeTo(null);
+		createRoute.setSize(400,200);
+		Container contenu = createRoute.getContentPane();
+		contenu.setLayout(new FlowLayout());
+		createRoute.setVisible(true);
+		
+		// Entrée de la longueur de la route
+		JPanel entrerLongueur = new JPanel();
+		entrerLongueur.setBorder(BorderFactory.createTitledBorder("Longueur de la route"));
+		entrerLongueur.add(new JLabel("Longueur : "));
+		JTextField valeur = new JTextField();
+		valeur.setColumns(10);
+		entrerLongueur.add(valeur);
+		entrerLongueur.add(new JLabel("m"));
+		contenu.add(entrerLongueur);
+		
+		// Entrée des caractéristiques des voies
+		JPanel entrerVoies = new JPanel();
+		entrerVoies.setBorder(BorderFactory.createTitledBorder("Caractériqtiques des voies"));
+		entrerVoies.add(new JLabel("Nombre de voies : "));
+		JTextField valeur1 = new JTextField();
+		valeur1.setColumns(10);
+		entrerVoies.add(valeur1);
+		entrerVoies.add(new JCheckBox("Voie à double sens"));
+		contenu.add(entrerVoies, BorderLayout.CENTER);
+		
+		// Bouton OK
+		JPanel ok = new JPanel();
+		JButton btnOk = new JButton("OK");
+		btnOk.addActionListener(this::valider);
+		ok.add(btnOk);
+		contenu.add(ok, BorderLayout.SOUTH);
+	}
+	
+	private void valider(ActionEvent e) {
+		createRoute.setVisible(false);
+		
+		ImageIcon image = new ImageIcon("route.png");
+		JLabel label = new JLabel(image);
+		label.setVisible(true);
+	}
+
+}

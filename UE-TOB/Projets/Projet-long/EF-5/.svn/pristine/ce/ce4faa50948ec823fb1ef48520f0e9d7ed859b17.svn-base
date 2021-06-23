@@ -1,0 +1,49 @@
+package reseau;
+
+import vehicules.Vehicule;
+
+/** permet de connaitre la position du véhicule sur la voie
+ * @author Clément, Adrien
+ */
+public class VehiculeSurVoie implements Comparable<VehiculeSurVoie> {
+    /** Vehicule */
+    private Vehicule vehicule;
+
+    /** Position du vehicule sur l'axe */
+    private double position;
+
+    /**
+     * Construire VehiculeSurVoie
+     * @param vehicule le vehicule
+     * @param position la position du vehicule sur la voie
+     */
+    public VehiculeSurVoie(Vehicule vehicule, double position) {
+        this.vehicule = vehicule;
+        this.position = position;
+    }
+    /**
+     * Obtenir la position du vehicule
+     * @return la position du vehicule
+     */
+    public double getPosition() {
+        return this.position;
+    }
+
+    /**
+     * Définir la position du vehicule
+     * @param newPosition
+     */
+    public void setPosition(double newPosition) {
+       this.position = newPosition;
+    }
+
+    @Override
+    public int compareTo(VehiculeSurVoie autreVehicule) {
+        return Double.compare(autreVehicule.getPosition(),this.position); //ordre décroissant des positions des vehicules sur la voie pour que 
+    }                                                        //l'itérable commence par les vehicules les plus proches de l'arrivée
+
+    @Override 
+    public boolean equals(Object object) {
+        return (object instanceof VehiculeSurVoie) && (this.position == ((VehiculeSurVoie) object).getPosition());
+    }
+}

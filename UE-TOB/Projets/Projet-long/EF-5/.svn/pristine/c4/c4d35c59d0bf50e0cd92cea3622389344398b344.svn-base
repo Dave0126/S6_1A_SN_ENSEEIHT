@@ -1,0 +1,59 @@
+package vehicules;
+import reseau.*;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+public class ItineraireMain {
+    public static void main(String[] arg){
+
+        Noeud n0 = new Noeud( 0.0, 0.0 , "0");
+        Noeud n1 = new Noeud( 2.0, 0.0, "1");
+        Noeud n2 = new Noeud( 0.0, 2.0, "2");
+        Noeud n3 = new Noeud( 2.0, 2.0, "3");
+        Noeud n4 = new Noeud( 1.0, 4.0, "4");
+        Noeud n5 = new Noeud( 0.0, 6.0 , "5");
+        Noeud n6 = new Noeud( 4.0, 4.0, "6");
+        Noeud n7 = new Noeud( 2.0, 6.0, "7");
+
+        Axe a0 = new Axe(n0,n1,"0",50,2);
+        Axe a1 = new Axe(n0,n2,"1",50,2);
+        Axe a2 = new Axe(n1,n3,"2",50,2);
+        Axe a3 = new Axe(n2,n4,"3",50,2);
+        Axe a4 = new Axe(n3,n4,"4",50,2);
+        Axe a5 = new Axe(n4,n5,"5",50,2);
+        Axe a6 = new Axe(n4,n6,"6",50,2);
+        Axe a7 = new Axe(n6,n7,"7",50,2);
+        Axe a8 = new Axe(n7,n5,"8",50,2);
+
+        List<Noeud> N = new ArrayList<Noeud>();
+        N.add(n0);
+        N.add(n1);
+        N.add(n2);
+        N.add(n3);
+        N.add(n4);
+        N.add(n5);
+        N.add(n6);
+        N.add(n7);
+        List<Axe> A = new ArrayList<Axe>();
+        A.add(a0);
+        A.add(a1);
+        A.add(a2);
+        A.add(a3);
+        A.add(a4);
+        A.add(a5);
+        A.add(a6);
+        A.add(a7);
+        A.add(a8);
+
+        Graphe e = new Graphe(N, A);
+        Itineraire2 i05 = new Itineraire2(e,n0,n5);
+        LinkedList<Noeud> I05 = i05.getPath();
+
+        for(Noeud x : I05){
+            System.out.print(x.getNom()+" -> ");
+        }
+        System.out.print("Done");
+    }
+}

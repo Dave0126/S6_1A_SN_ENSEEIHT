@@ -1,0 +1,61 @@
+package vehicules;
+import reseau.*;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+public class ItineraireMain {
+    public static void main(String[] arg){
+
+        Reseau reseau1 = new Reseau();
+
+        Noeud n0 = reseau1.creerNoeud( 0.0, 0.0 , "0", TypeNoeud.DEFAULT);
+        Noeud n1 = reseau1.creerNoeud( 2.0, 0.0, "1", TypeNoeud.DEFAULT);
+        Noeud n2 = reseau1.creerNoeud( 0.0, 2.0, "2", TypeNoeud.DEFAULT);
+        Noeud n3 = reseau1.creerNoeud( 2.0, 2.0, "3", TypeNoeud.DEFAULT);
+        Noeud n4 = reseau1.creerNoeud( 1.0, 4.0, "4", TypeNoeud.DEFAULT);
+        Noeud n5 = reseau1.creerNoeud( 0.0, 6.0 , "5", TypeNoeud.DEFAULT);
+        Noeud n6 = reseau1.creerNoeud( 4.0, 4.0, "6", TypeNoeud.DEFAULT);
+        Noeud n7 = reseau1.creerNoeud( 2.0, 6.0, "7", TypeNoeud.DEFAULT);
+
+        Axe a0 = reseau1.creerAxe(n0,n1,"0",50,2);
+        Axe a1 = reseau1.creerAxe(n0,n2,"1",50,2);
+        Axe a2 = reseau1.creerAxe(n1,n3,"2",50,2);
+        Axe a3 = reseau1.creerAxe(n2,n4,"3",50,2);
+        Axe a4 = reseau1.creerAxe(n3,n4,"4",50,2);
+        Axe a5 = reseau1.creerAxe(n4,n5,"5",50,2);
+        Axe a6 = reseau1.creerAxe(n4,n6,"6",50,2);
+        Axe a7 = reseau1.creerAxe(n6,n7,"7",50,2);
+        Axe a8 = reseau1.creerAxe(n7,n5,"8",50,2);
+
+        List<Noeud> N = new ArrayList<Noeud>();
+        N.add(n0);
+        N.add(n1);
+        N.add(n2);
+        N.add(n3);
+        N.add(n4);
+        N.add(n5);
+        N.add(n6);
+        N.add(n7);
+        List<Axe> A = new ArrayList<Axe>();
+        A.add(a0);
+        A.add(a1);
+        A.add(a2);
+        A.add(a3);
+        A.add(a4);
+        A.add(a5);
+        A.add(a6);
+        A.add(a7);
+        A.add(a8);
+
+        Graphe e = new Graphe(N, A);
+        Itineraire2 i05 = new Itineraire2(e,n0,n5);
+        LinkedList<Noeud> I05 = i05.getPath();
+
+        for(Noeud x : I05){
+            System.out.print(x.getNom()+" -> ");
+        }
+        System.out.print("Done");
+    }
+}

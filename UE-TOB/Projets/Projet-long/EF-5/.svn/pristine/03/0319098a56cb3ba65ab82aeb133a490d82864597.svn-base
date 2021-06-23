@@ -1,0 +1,79 @@
+package reseau;
+
+/**Chemin reliant 2 noeuds entre eux.
+ * @version 0.1
+ * @author Adrien, Clément, Pierre-Louis
+ */
+public class Axe {
+
+	/** Nom de l'axe */
+    private String nom;
+
+    /** Longeur de l'axe */
+    private double longueur;
+
+    /** Noeud départ */
+    private Noeud depart;
+
+    /** Noeud arrivée */
+    private Noeud arrivee;
+    
+    /** Vitesse sur l'axe */
+    private int vitesse;
+    
+    /**
+     * 
+     * @param depart Noeud du depart de l'axe
+     * @param arrivee Noeud à la fin de l'axe
+     * @param longueur de l'axe
+     * @param vitesse maximale autorisée sur l'axe
+     */
+    public Axe(Noeud depart, Noeud arrivee, String nom, double longueur, int vitesse) {
+		this.depart = depart;
+		this.arrivee = arrivee;
+        this.nom = nom;
+		this.longueur = longueur;
+		this.vitesse = vitesse;
+	}
+
+    /**
+     * 
+     * @return nom de l'axe
+     */
+    public String getNom() {
+        return this.nom;
+    }
+
+    /**
+     * 
+     * @return longueur de l'axe
+     */
+    public double getlongueur() {
+        return this.longueur;
+    }
+
+    /**
+     * 
+     * @return Début de l'axe
+     */
+    public Noeud getDepart() {
+        return this.depart;
+    }
+
+    /**
+     * 
+     * @return fin de l'axe
+     */
+    public Noeud getArrivee() {
+        return this.arrivee;
+    }
+
+    /**
+     * 
+     * @return vitesse maximale autorisée sur l'axe
+     */
+    public int getVitesse() {
+        return this.vitesse;
+    }
+
+}

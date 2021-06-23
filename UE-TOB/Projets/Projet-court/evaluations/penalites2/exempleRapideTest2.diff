@@ -1,0 +1,14 @@
+18c17
+< Ordinateur prend 1 allumette.
+---
+> Ordinateur prend 2 allumettes.
+20,25c19,20
+< Nombre d'allumettes restantes : 1
+< Xavier, combien d'allumettes ? Exception in thread "main" java.util.NoSuchElementException: No line found
+< 	at java.base/java.util.Scanner.nextLine(Scanner.java:1651)
+< 	at allumettes.StrategieHumain.prise(StrategieHumain.java:25)
+< 	at allumettes.Arbitre.arbitrer(Arbitre.java:65)
+< 	at allumettes.Jouer.main(Jouer.java:58)
+---
+> Ordinateur perd !
+> Xavier gagne !

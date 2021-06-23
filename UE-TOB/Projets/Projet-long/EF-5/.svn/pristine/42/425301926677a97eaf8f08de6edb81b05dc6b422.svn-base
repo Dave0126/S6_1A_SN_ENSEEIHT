@@ -1,0 +1,106 @@
+
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+
+public class mainPanel {
+
+     public static void main(String[] argc){
+         JFrame mainFrame = new JFrame();
+         mainFrame.setLayout(null);
+         JPanel mainPanel = getPanel();
+         mainFrame.setBounds(0,0,500,400);
+         mainFrame.setResizable(false);
+         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+         mainFrame.add(mainPanel);
+         mainFrame.setVisible(true);
+     }
+
+     public static JPanel getPanel(){
+
+         //Panel principale
+         JPanel mainPanel = new JPanel();
+         mainPanel.setLayout(null);
+
+         //Panel graphique ou on dessine
+
+
+
+         PanelDrawing pp = new PanelDrawing();
+         pp.setBounds(0,70,500,330);
+
+
+
+         //Panel contenant les buttons
+         JPanel buttonsPanel = new JPanel();
+         JSlider scalleSlider = new JSlider(1,100);
+         scalleSlider.setValue(100);
+         scalleSlider.addChangeListener(new ChangeListener() {
+             @Override
+             public void stateChanged(ChangeEvent e) {
+                 JSlider sliderSource = (JSlider) e.getSource();
+                 pp.rescalle(sliderSource.getValue());
+             }
+         });
+
+         scalleSlider.setSize(40,10);
+
+
+
+         buttonsPanel.setBounds(0,0,500,70);
+         buttonsPanel.setBackground(Color.orange);
+
+
+
+         //les buttons
+         JButton buttonRoute = new JButton("Route");
+         JButton buttonIntersection = new JButton("Intersection");
+         JButton buttonClearAll = new JButton("clear All");
+
+
+
+         // selection entre rond point et route
+         buttonRoute.addActionListener(new ActionListener() {
+             @Override
+             public void actionPerformed(ActionEvent e) {
+                 pp.routeOuIntersection(true);
+             }
+         });
+         buttonIntersection.addActionListener(new ActionListener() {
+             @Override
+             public void actionPerformed(ActionEvent e) {
+                 pp.routeOuIntersection(false);
+             }
+         });
+         buttonClearAll.addActionListener(new ActionListener() {
+             @Override
+             public void actionPerformed(ActionEvent e) {
+                 pp.clearAll();
+             }
+         });
+
+
+         buttonsPanel.add(buttonRoute);
+         buttonsPanel.add(buttonIntersection);
+         buttonsPanel.add(buttonClearAll);
+         buttonsPanel.add(scalleSlider);
+
+
+
+         buttonClearAll.setVisible(true);
+         buttonIntersection.setVisible(true);
+         buttonRoute.setVisible(true);
+         buttonsPanel.setVisible(true);
+
+
+
+         mainPanel.add(buttonsPanel);
+         mainPanel.add(pp);
+         mainPanel.setBounds(0,0,500,400);
+         return mainPanel;
+     }
+}

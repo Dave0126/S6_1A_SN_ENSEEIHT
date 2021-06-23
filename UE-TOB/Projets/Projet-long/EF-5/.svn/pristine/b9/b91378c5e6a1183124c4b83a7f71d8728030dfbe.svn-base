@@ -1,0 +1,234 @@
+package vue;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class Fenetre {
+
+	private JFrame fenetre;
+
+	/**
+	 * Lancer l'application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Fenetre window = new Fenetre();
+					window.fenetre.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Créer l'application.
+	 */
+	public Fenetre() {
+		initialize();
+	}
+
+	/**
+	 * Initialiser le contenu de la fenêtre.
+	 */
+	private void initialize() {
+		fenetre = new JFrame();
+		fenetre.setTitle("Simulateur de système routier");
+		fenetre.setBounds(100, 100, 711, 557);
+		fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		fenetre.getContentPane().setLayout(null);
+		
+		JTabbedPane onglets = new JTabbedPane(JTabbedPane.TOP);
+		onglets.setBounds(0, 0, 695, 519);
+		fenetre.getContentPane().add(onglets);
+		
+		// Onglet Création
+		JPanel creation = new JPanel();
+		onglets.addTab("Création", null, creation, null);
+		creation.setLayout(null);
+		
+		JPanel boutons = new JPanel();
+		boutons.setBounds(0, 0, 113, 491);
+		creation.add(boutons);
+		boutons.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		JButton btnRoutes = new JButton("Routes");
+		boutons.add(btnRoutes);
+		btnRoutes.addActionListener(this::creerRoute);
+		
+		JButton btnRondP = new JButton("Rond-point");
+		boutons.add(btnRondP);
+		btnRondP.addActionListener(this::creerRondP);
+		
+		JButton btnInter = new JButton("Intersection");
+		boutons.add(btnInter);
+		btnInter.addActionListener(this::creerInter);
+		
+		JButton btnSignalisation = new JButton("Signalisation");
+		boutons.add(btnSignalisation);
+		btnSignalisation.addActionListener(this::creerRondP);
+		
+		JButton btnPieton = new JButton("Passage piéton");
+		boutons.add(btnPieton);
+		btnPieton.addActionListener(this::creerPassageP);
+		
+		JRadioButton btnManuel = new JRadioButton("Mode manuel");
+		boutons.add(btnManuel);
+		
+		JPanel inter = new JPanel();
+		inter.setBounds(112, 0, 495, 491);
+		creation.add(inter);
+		
+		JPanel menuDroit = new JPanel();
+		menuDroit.setBounds(609, 0, 81, 491);
+		creation.add(menuDroit);
+		
+		
+		// Onglet Simulation
+		JPanel simu = new JPanel();
+		onglets.addTab("Simulation", null, simu, null);
+		simu.setLayout(null);
+		
+		JTabbedPane modeSimu = new JTabbedPane(JTabbedPane.TOP);
+		modeSimu.setBounds(0, 0, 690, 491);
+		simu.add(modeSimu);
+		
+		JPanel rapide = new JPanel();
+		modeSimu.addTab("Rapide", null, rapide, null);
+		rapide.setLayout(null);
+		
+		JPanel panOptions = new JPanel();
+		panOptions.setBounds(0, 0, 107, 463);
+		rapide.add(panOptions);
+		panOptions.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		JLabel options = new JLabel("Options");
+		panOptions.add(options);
+		
+		JButton btnDepart = new JButton("Zone de départ");
+		panOptions.add(btnDepart);
+		btnDepart.addActionListener(this::selectDepart);
+		
+		JButton btnArrivee = new JButton("Zone d'arrivée");
+		panOptions.add(btnArrivee);
+		btnArrivee.addActionListener(this::selectArrivee);
+		
+		JCheckBox feuOpti = new JCheckBox("Feux optimisés");
+		panOptions.add(feuOpti);
+		
+		JPanel detaille = new JPanel();
+		modeSimu.addTab("Détaillé", null, detaille, null);
+		detaille.setLayout(null);
+		
+		// Onglet Résultats
+		JPanel resultat = new JPanel();
+		onglets.addTab("Résultats", null, resultat, null);
+	}
+	
+	
+	
+	/**
+	 * Action Listeners.
+	 */
+	private void creerRoute(ActionEvent e) {
+		JDialog createRoute = new JDialog(this.fenetre, "Créer une nouvelle route");
+		createRoute.setVisible(true); 
+		createRoute.setLocationRelativeTo(null);
+		createRoute.setSize(400,200);
+		Container contenu = createRoute.getContentPane();
+		contenu.setLayout(new FlowLayout());
+		createRoute.setVisible(true);
+		
+		// Entrée de la longueur de la route
+		JPanel entrerLongueur = new JPanel();
+		entrerLongueur.setBorder(BorderFactory.createTitledBorder("Longueur de la route"));
+		entrerLongueur.add(new JLabel("Longueur : "));
+		JTextField valeur = new JTextField();
+		valeur.setColumns(10);
+		entrerLongueur.add(valeur);
+		entrerLongueur.add(new JLabel("m"));
+		contenu.add(entrerLongueur);
+		
+		// Entrée des caractéristiques des voies
+		JPanel entrerVoies = new JPanel();
+		entrerVoies.setBorder(BorderFactory.createTitledBorder("Caractériqtiques des voies"));
+		entrerVoies.add(new JLabel("Nombre de voies : "));
+		JTextField valeur1 = new JTextField();
+		valeur1.setColumns(10);
+		entrerVoies.add(valeur1);
+		entrerVoies.add(new JCheckBox("Voie à double sens"));
+		contenu.add(entrerVoies, BorderLayout.CENTER);
+		
+		// Bouton OK
+		JPanel ok = new JPanel();
+		JButton btnOk = new JButton("OK");
+		ok.add(btnOk);
+		contenu.add(ok, BorderLayout.SOUTH);		
+		
+	}
+	
+	
+	private void creerRondP(ActionEvent e) {
+		JDialog createRoute = new JDialog(this.fenetre, "Créer un nouveau rond-point");
+		createRoute.setVisible(true);
+		createRoute.setLocationRelativeTo(null);
+		createRoute.setSize(400,200);
+		Container contenu = createRoute.getContentPane();
+		
+		// Entrée de la longueur de la route
+		JPanel entrerRondP = new JPanel();
+		entrerRondP.setBorder(BorderFactory.createTitledBorder("Caractéristiques du rond-point"));
+		entrerRondP.add(new JLabel("Nombre de sorties : "));
+		JTextField nbSorties = new JTextField();
+		nbSorties.setColumns(10);
+		entrerRondP.add(nbSorties);
+		
+		entrerRondP.add(new JLabel("Rayon du rond-point : "));
+		JTextField rayon = new JTextField();
+		rayon.setColumns(10);
+		entrerRondP.add(rayon);
+		entrerRondP.add(new JLabel("m"));
+		contenu.add(entrerRondP);
+		
+		// Bouton OK
+		JPanel ok = new JPanel();
+		ok.setLayout(new FlowLayout());
+		JButton btnOk = new JButton("OK");
+		ok.add(btnOk);
+		JButton btnAnnuler = new JButton("Annuler");
+		ok.add(btnAnnuler);
+		contenu.add(ok, BorderLayout.SOUTH);	
+	}
+	
+	private void creerInter(ActionEvent e) {
+		JFrame createRoute = new JFrame("Créer une nouvelle intersection");
+		createRoute.setVisible(true);
+		createRoute.setLocationRelativeTo(null);
+		createRoute.setSize(400,200);	
+	}
+	
+	private void creerPassageP(ActionEvent e) {
+		JFrame createRoute = new JFrame("Créer un passage piéton");
+		createRoute.setVisible(true);
+		createRoute.setLocationRelativeTo(null);
+		createRoute.setSize(400,200);		
+	}
+	
+	private void selectDepart(ActionEvent e) {
+		JFrame createRoute = new JFrame("Sélectionner une zone de départ");
+		createRoute.setVisible(true);
+		createRoute.setLocationRelativeTo(null);
+		createRoute.setSize(400,200);		
+	}
+	
+	private void selectArrivee(ActionEvent e) {
+		JFrame createRoute = new JFrame("Sélectionner une zone d'arrivée");
+		createRoute.setVisible(true);
+		createRoute.setLocationRelativeTo(null);
+		createRoute.setSize(400,200);		
+	}
+	
+	
+}

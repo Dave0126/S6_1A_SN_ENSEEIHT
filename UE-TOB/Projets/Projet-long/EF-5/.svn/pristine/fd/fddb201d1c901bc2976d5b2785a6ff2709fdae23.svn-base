@@ -1,0 +1,39 @@
+package reseau;
+
+import java.util.TreeSet;
+import vehicules.Vehicule;
+
+/**
+ * Représente le réseau, fourni les moyens d'acceder aux éléments du réseau, et d'en créer.
+ * @version 0.1
+ * @author Adrien, Clément, Pierre-Louis
+ */
+public class Voie {
+	
+    /** Ensemble des vehicules sur la voie */
+    private TreeSet<VehiculeSurVoie> ensVehicule;
+    
+    /**
+     * Crée la voie
+     */
+    public Voie() {
+        this.ensVehicule = new TreeSet<VehiculeSurVoie>();
+    }
+    
+    /**
+     * Ajoute un vehicule 
+     * @param vehicule le vehicule à ajouter
+     * @param position la position du vehicule
+     */
+    public void addVehicule(Vehicule vehicule, double position) {
+        this.ensVehicule.add(new VehiculeSurVoie(vehicule, position));
+    }
+
+    /**
+     * Supprime un vehicule
+     * @param vehicule le vehicule à supprimer
+     */
+    public void dellVehicule(Vehicule vehicule) {
+        this.ensVehicule.remove(vehicule);
+    }
+}

@@ -1,0 +1,23 @@
+3,7c2,17
+< R1, combien d'allumettes ? Exception in thread "main" java.util.NoSuchElementException: No line found
+< 	at java.base/java.util.Scanner.nextLine(Scanner.java:1651)
+< 	at allumettes.Arbitre.scannerNumber(Arbitre.java:51)
+< 	at allumettes.Arbitre.start(Arbitre.java:116)
+< 	at allumettes.Jouer.main(Jouer.java:66)
+---
+> R1 prend 3 allumettes.
+> 
+> Nombre d'allumettes restantes : 10
+> R2 prend 3 allumettes.
+> 
+> Nombre d'allumettes restantes : 7
+> R1 prend 3 allumettes.
+> 
+> Nombre d'allumettes restantes : 4
+> R2 prend 3 allumettes.
+> 
+> Nombre d'allumettes restantes : 1
+> R1 prend 1 allumette.
+> 
+> R1 perd !
+> R2 gagne !

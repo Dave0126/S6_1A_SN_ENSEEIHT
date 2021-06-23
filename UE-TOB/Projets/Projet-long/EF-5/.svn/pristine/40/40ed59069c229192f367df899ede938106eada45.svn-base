@@ -1,0 +1,37 @@
+package reseau;
+
+public class Noeud2 {
+    final private int identifiant;
+    double x;
+    double y;
+
+
+
+    public Noeud2(int id, double x, double y) {
+        this.identifiant = id;
+        this.x = x;
+        this.y = y;
+    }
+    public int getId() {
+        return identifiant;
+    }
+
+    public double getX() {
+        return this.x;
+    }
+
+    public double getY() {
+        return this.y;
+    }
+
+
+    @Override
+    public String toString() {
+        return "x";
+    }
+
+    public double distance(Noeud2 e){
+        return java.lang.Math.sqrt((this.getY() - e.getY())*(this.getY() - e.getY()) + (this.getX() - e.getX())*(this.getX() - e.getX()));
+    }
+
+}

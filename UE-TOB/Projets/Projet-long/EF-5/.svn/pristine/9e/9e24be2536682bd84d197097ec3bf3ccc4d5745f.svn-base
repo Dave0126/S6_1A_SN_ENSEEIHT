@@ -1,0 +1,8 @@
+package reseau;
+
+public enum TypeNoeud {
+
+	ENTREE_SORTIE,
+	DEFAULT;
+	
+}

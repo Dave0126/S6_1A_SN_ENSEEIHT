@@ -1,0 +1,59 @@
+package reseau;
+
+/**
+ * Singleton chargé de créer les objets noeud, en fonction du type voulu.
+ * @version 0.1
+ * @author Adrien, Clément, Pierre-Louis
+ */
+class NoeudFactory {
+
+	private NoeudFactory() {}
+	
+	private static NoeudFactory INSTANCE;
+	
+	/**
+	 * Obtient l'instance unique de la classe
+	 * @return l'instance
+	 */
+	static NoeudFactory getInstance() {
+		if (INSTANCE == null) INSTANCE = new NoeudFactory();
+		return INSTANCE;
+	}
+	
+	/**
+	 * Créé un noeud en fonction du type fourni
+	 * @param abscisse Abscisse du noeud
+	 * @param ordonnee Ordonnée du noeud
+	 * @param nom Nom du noeud
+	 * @param type Type de noeud à créer
+	 * @return le Noeud créé
+	 */
+	Noeud creerNoeud(double abscisse, double ordonnee, String nom, TypeNoeud type) {
+		if (type == TypeNoeud.ENTREE_SORTIE) return this.creerEntreeSortie(abscisse, ordonnee, nom);
+		else if (type == TypeNoeud.DEFAULT) return this.creerNoeudDefault(abscisse, ordonnee, nom);
+		else return null;
+	}
+
+	/**
+	 * Créé un noeud classique
+	 * @param abscisse Abscisse du noeud
+	 * @param ordonnee Ordonnée du noeud
+	 * @param nom Nom du noeud
+	 * @return le Noeud classique créé
+	 */
+	private Noeud creerNoeudDefault(double abscisse, double ordonnee, String nom) {
+		return new NoeudDefault(abscisse, ordonnee, nom);
+	}
+
+	/**
+	 * Créé un noeud d'entrée-sortie
+	 * @param abscisse Abscisse du noeud
+	 * @param ordonnee Ordonnée du noeud
+	 * @param nom Nom du noeud
+	 * @return le Noeud d'entrée-sortie créé
+	 */
+	private Noeud creerEntreeSortie(double abscisse, double ordonnee, String nom) {
+		return new NoeudEnSo(abscisse, ordonnee, nom);
+	}
+	
+}

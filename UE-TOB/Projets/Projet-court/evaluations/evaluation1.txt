@@ -1,0 +1,74 @@
+Date de l'évaluation : dim. 04 avril 2021 22:55:45 CEST
+
+Nombre de similitudes (voir evaluations/evaluation1/sim_java.txt) : 10
+Les similitudes indiquent généralement du code à restructurer.
+
+Erreurs checkstyle (différentes/types) : 11/8	(voir evaluations/evaluation1//checkstyle.log)
+
+Classe OperationInterditeException : OperationInterditeException (ok)
+
+Procuration sur le jeu réel : allumettes/StrategieHumain.java (ok)
+
+OperationInterditeException, levée dans : allumettes/StrategieHumain.java (ok)
+OperationInterditeException, récupérée dans : allumettes/Arbitre.java (ok)
+
+Throwable, Exception et RuntimeException ne devraient pas être récupérées car trop générales... ok
+
+AssertionError ne doit pas être récupérée... ok
+
+Autres exceptions récupérées :
+  | allumettes/Arbitre.java:70:                 } catch (SomeoneCheatsException f) {
+  | allumettes/Arbitre.java:93:         } catch (CoupInvalideException e) {
+  | allumettes/Jouer.java:60:       } catch (ConfigurationException e) {
+
+Utilisation de 'Scanner' : ok
+  | allumettes/StrategieHumain.java:9:  private Scanner sc;
+  | allumettes/StrategieHumain.java:12: public StrategieHumain(Scanner sc) {
+  | allumettes/Jouer.java:32:           Scanner sc = new Scanner(System.in);
+  | allumettes/Jouer.java:104:  public static Strategie getStrategie(String strategie, Scanner sc) {
+  | allumettes/Jouer.java:128:  public static Joueur createPlayer(String[] input, Scanner sc) {
+
+Utilisation de 'split' : ok
+  | allumettes/Jouer.java:151:      String[] nameAndStrategie = args.split("@");
+
+Utilisation de 'Random' : ok
+  | allumettes/StrategieNaif.java:3:import java.util.Random;
+  | allumettes/StrategieNaif.java:27:       Random r = new Random();
+  | allumettes/StrategieExpert.java:3:import java.util.Random;
+  | allumettes/StrategieExpert.java:27:     Random r = new Random();
+
+Utilisation de '3' : ok
+
+Affichage de 'Impossible !' : ok
+
+Utilisation de 'System.exit' : ok
+
+Compilation de Jouer.java : OK.
+Compilation de Arbitre.java : OK.
+Compilation de JeuProxyTest.java : OK.
+Compilation de StrategieRapideTest.java : OK.
+Compilation de JeuTest.java : OK.
+Test exemplePresqueSujet : ok
+Test exempleTricheurSujet : ok
+Test exempleConfiantTricheurSujet : ok
+Test exempleRobustesse : ok
+Test exempleHumainTricheurExpert : ok
+Test exempleLucLea : ok
+Test exempleRapideRapide : ok
+Test exempleTricheurExpert : ok
+
+Test RobustesseTest : OK (25 tests)	(voir evaluations/evaluation1/RobustesseTest.log)
+
+On recommence avec les classes/interfaces fournies : Jeu ConfigurationException CoupInvalideException
+Compilation de Jouer.java : OK.
+Compilation de Arbitre.java : OK.
+
+Vérification du respect du diagramme de classe...
+Test FormeTest : OK (2 tests)	(voir evaluations/evaluation1/FormeTest.log)
+
+Compilation de JeuProxyTest.java : OK.
+Test allumettes.JeuProxyTest : OK (3 tests)	(voir evaluations/evaluation1/allumettes.JeuProxyTest.log)
+Compilation de StrategieRapideTest.java : OK.
+Test allumettes.StrategieRapideTest : OK (2 tests)	(voir evaluations/evaluation1/allumettes.StrategieRapideTest.log)
+Compilation de JeuTest.java : OK.
+Test allumettes.JeuTest : OK (3 tests)	(voir evaluations/evaluation1/allumettes.JeuTest.log)

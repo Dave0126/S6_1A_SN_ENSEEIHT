@@ -1,0 +1,5 @@
+package simulation.reseau;
+
+public enum Position {
+    Nord,Est,Sud,Ouest;
+}

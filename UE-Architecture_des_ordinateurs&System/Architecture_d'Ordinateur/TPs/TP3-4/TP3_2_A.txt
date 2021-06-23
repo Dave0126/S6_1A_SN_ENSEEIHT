@@ -1,0 +1,15 @@
+N = 10
+          set Tab, %r2
+          ld [%r2], %r1 // r1 est modifiable contrairement à mini-craps
+          set 1, %r3
+
+Tantque : cmp %r3, N
+          bgeu FinTque // branch if r3 greater or equal unsigned N
+          ld [%r2+%r3], %r4 // ld = load
+          add %r4, %r1, %r1
+          add %r3, 1, %r3
+          ba Tantque
+          
+FinTque: st %r1, [%r2+N] // st = store
+Stop : ba Stop
+Tab : .word 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0

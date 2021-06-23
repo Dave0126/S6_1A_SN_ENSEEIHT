@@ -1,0 +1,42 @@
+import javax.swing.*;
+import java.awt.*;
+
+public class RondPoint extends JComponent {
+    int x1, y1, rayon;
+    boolean highlight = false;
+
+    public RondPoint(int xun, int yun){
+        x1 = xun;
+        y1 = yun;
+        rayon = 15;
+        this.setVisible(true);
+    }
+
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        Graphics2D g2D = (Graphics2D) g;
+
+        if (highlight) g2D.setColor(Color.pink);
+        else g2D.setColor(Color.red);
+
+        g2D.setColor(Color.BLACK);
+        int rayonNoir = 2*rayon;
+        g2D.fillOval(x1-(rayonNoir/2),y1-(rayonNoir/2),rayonNoir,rayonNoir);
+
+        g2D.setColor(Color.orange);
+
+        int rayonRouge = (int)(0.6*rayon);
+        g2D.fillOval(x1-(rayonRouge/2),y1-(rayonRouge/2),rayonRouge,rayonRouge);
+
+
+
+    }
+
+    void changeColor(boolean state){
+        highlight = state;
+    }
+
+    public void changeScalle(int scalle){
+        rayon = (int) (rayon *(scalle/100));
+    }
+}

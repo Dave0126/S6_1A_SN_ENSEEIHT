@@ -1,0 +1,9 @@
+package vehicules;
+
+
+public class Voiture extends Vehicule {
+
+    public Voiture() {
+        super(0,4,0);
+    }
+}

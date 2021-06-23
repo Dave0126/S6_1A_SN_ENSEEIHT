@@ -1,0 +1,38 @@
+package reseau;
+
+public class Axe2 {
+    private int id;
+    private double vitesse;
+    private double longueur;
+    private Noeud2 depart;
+    private Noeud2 arrive;
+
+    public Axe2(double v, Noeud2 de, Noeud2 ar, int ID){
+        this.vitesse = v;
+        //this.longueur = longueur;
+        this.depart = de;
+        this.arrive = ar;
+    }
+
+    public double getDIstance(){
+        return depart.distance(arrive);
+    }
+
+    public double getVitesse(){
+        return this.vitesse;
+    }
+
+    public double getLongueur(){
+        return this.longueur;
+    }
+
+    public Noeud2 getDepart(){
+        return this.depart;
+    }
+
+    public Noeud2 getArrive(){
+        return this.arrive;
+    }
+
+
+}

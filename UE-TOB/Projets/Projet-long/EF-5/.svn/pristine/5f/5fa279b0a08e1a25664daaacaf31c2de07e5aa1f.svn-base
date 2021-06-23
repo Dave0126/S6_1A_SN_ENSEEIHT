@@ -1,0 +1,9 @@
+package reseau;
+
+public class NoeudDefault extends NoeudJonction {
+
+	public NoeudDefault(double abscisse, double ordonnee, String nom) {
+		super(abscisse, ordonnee, nom);
+	}
+	
+}
